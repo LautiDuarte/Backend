@@ -1,44 +1,33 @@
 import { Repository } from '../shared/repository.js'
 import { TipoJuego } from './tipoJuego.entity.js'
+import { db } from '../shared/db/conn.js'
+import { ObjectId } from 'mongodb'
+import { after } from 'node:test'
 
-const tipoJuegos = [
-  new TipoJuego(
-    'RPG',
-    'Role-Play Game',
-    'f1f5a1e4-ee46-479e-a967-52c57b15e7f4'
-  ),
-]
+const tipoJuego = db.collection<TipoJuego>('tipoJuego')
 
 export class tipoJuegoRepository implements Repository<TipoJuego> {
-  public findAll(): TipoJuego[] | undefined {
-    return tipoJuegos
+  public async findAll(): Promise<TipoJuego[] | undefined> {
+    return await tipoJuego.find().toArray()
   }
 
-  public findOne(item: { id: string }): TipoJuego| undefined {
-    return tipoJuegos.find((tipoJuego) => tipoJuego.id === item.id)
+  public async findOne(item: { id: string }): Promise<TipoJuego| undefined> {
+    const _id = new ObjectId(item.id)
+    return (await tipoJuego.findOne({_id})) || undefined
   }
 
-  public add(item: TipoJuego): TipoJuego | undefined {
-    tipoJuegos.push(item)
+  public async add(item: TipoJuego): Promise<TipoJuego | undefined> {
+    item._id = (await tipoJuego.insertOne(item)).insertedId
     return item
   }
 
-  public update(item: TipoJuego): TipoJuego | undefined {
-    const tipoJuegoIdx = tipoJuegos.findIndex((tipoJuego) => tipoJuego.id === item.id)
-
-    if (tipoJuegoIdx !== -1) {
-      tipoJuegos[tipoJuegoIdx] = { ...tipoJuegos[tipoJuegoIdx], ...item }
-    }
-    return tipoJuegos[tipoJuegoIdx]
+  public async update(id: string, item: TipoJuego): Promise<TipoJuego | undefined> {
+    const _id = new ObjectId(id)
+    return (await tipoJuego.findOneAndUpdate({_id},{$set:item},{returnDocument:'after'})) || undefined
   }
 
-  public delete(item: { id: string }): TipoJuego | undefined {
-    const tipoJuegoIdx = tipoJuegos.findIndex((tipoJuego) => tipoJuego.id === item.id)
-
-    if (tipoJuegoIdx !== -1) {
-      const deletedTipoJuego = tipoJuegos[tipoJuegoIdx]
-      tipoJuegos.splice(tipoJuegoIdx, 1)
-      return deletedTipoJuego
-    }
+  public async delete(item: { id: string }):  Promise<TipoJuego | undefined> {
+    const _id = new ObjectId(item.id)
+    return (await tipoJuego.findOneAndDelete({_id})) || undefined 
   }
 }

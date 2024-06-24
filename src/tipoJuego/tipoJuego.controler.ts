@@ -20,20 +20,20 @@ function sanitizetipoJuegoInput(req: Request, res: Response, next: NextFunction)
   next()
 }
 
-function findAll(req: Request, res: Response) {
-  res.json({ data: repository.findAll() })
+async function findAll(req: Request, res: Response) {
+  res.json({ data: await repository.findAll() })
 }
 
-function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
   const id = req.params.id
-  const tipoJuego = repository.findOne({ id })
+  const tipoJuego = await repository.findOne({ id })
   if (!tipoJuego) {
     return res.status(404).send({ message: 'tipoJuego not found' })
   }
   res.json({ data: tipoJuego })
 }
 
-function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput
   
   const tipoJuegoInput = new TipoJuego(
@@ -45,9 +45,8 @@ function add(req: Request, res: Response) {
   return res.status(201).send({ message: 'tipoJuego created', data: tipoJuego })
 }
 
-function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id
-  const tipoJuego = repository.update(req.body.sanitizedInput)
+async function update(req: Request, res: Response) {
+  const tipoJuego = await repository.update(req.params.id, req.body.sanitizedInput)
 
   if (!tipoJuego) {
     return res.status(404).send({ message: 'tipoJuego not found' })
@@ -56,9 +55,9 @@ function update(req: Request, res: Response) {
   return res.status(200).send({ message: 'tipoJuego updated successfully', data: tipoJuego })
 }
 
-function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
   const id = req.params.id
-  const tipoJuego = repository.delete({ id })
+  const tipoJuego = await repository.delete({ id })
 
   if (!tipoJuego) {
     res.status(404).send({ message: 'tipoJuego not found' })
