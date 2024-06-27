@@ -1,0 +1,34 @@
+###obtener todos los tipos de juego
+GET http://localhost:3000/api/news
+
+### obtener una noticia
+GET http://localhost:3000/api/news/121341414
+
+### crear una nuevo noticia
+POST http://localhost:3000/api/news
+Content-Type: application/json
+
+{
+  "title": "Se perdio un caniche",
+  "body": "A la vuelta de la esquina"
+}
+
+### modificar una noticia (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/news/6678c77bc7b71bfc1cabbab5
+Content-Type: application/json
+
+{
+  "title": "Milei llega al 0,000000001% de inflacion",
+  "body": "jugamos un lol?"
+}  
+
+### modificar una noticia (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/news/6678c77bc7b71bfc1cabbab5
+Content-Type: application/json
+
+{
+  "body": "sentado en la esquina"
+}
+
+### borrar una noticia
+DELETE http://localhost:3000/api/news/6678b1d8104f3b943790defe
