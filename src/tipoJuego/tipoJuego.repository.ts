@@ -2,7 +2,6 @@ import { Repository } from '../shared/repository.js'
 import { TipoJuego } from './tipoJuego.entity.js'
 import { db } from '../shared/db/conn.js'
 import { ObjectId } from 'mongodb'
-import { after } from 'node:test'
 
 const tipoJuego = db.collection<TipoJuego>('tipoJuego')
 

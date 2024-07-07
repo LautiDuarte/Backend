@@ -1,10 +1,10 @@
-###obtener todos los tipos de juego
+###obtener todas las noticias
 GET http://localhost:3000/api/news
 
 ### obtener una noticia
-GET http://localhost:3000/api/news/121341414
+GET http://localhost:3000/api/news/668ab5295bd9ea1dd5316944
 
-### crear una nuevo noticia
+### crear una nueva noticia
 POST http://localhost:3000/api/news
 Content-Type: application/json
 
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### modificar una noticia (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/news/6678c77bc7b71bfc1cabbab5
+PUT http://localhost:3000/api/news/668ab5295bd9ea1dd5316944
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 }  
 
 ### modificar una noticia (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/news/6678c77bc7b71bfc1cabbab5
+PATCH http://localhost:3000/api/news/668ab5295bd9ea1dd5316944
 Content-Type: application/json
 
 {
@@ -31,4 +31,4 @@ Content-Type: application/json
 }
 
 ### borrar una noticia
-DELETE http://localhost:3000/api/news/6678b1d8104f3b943790defe
+DELETE http://localhost:3000/api/news/668ab5295bd9ea1dd5316944

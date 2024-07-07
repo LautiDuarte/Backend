@@ -2,7 +2,6 @@ import { TipoJuego } from './tipoJuego.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { tipoJuegoRepository } from './tipoJuego.repository.js'
 
-
 const repository = new tipoJuegoRepository()
 
 function sanitizetipoJuegoInput(req: Request, res: Response, next: NextFunction) {

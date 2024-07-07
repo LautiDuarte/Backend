@@ -2,7 +2,7 @@
 GET http://localhost:3000/api/tipoJuego
 
 ### obtener un tipo de juego
-GET http://localhost:3000/api/tipoJuego/6678b1d8104f3b943790defe
+GET http://localhost:3000/api/tipoJuego/668ab22108b137db2165e022
 
 ### crear un nuevo tipo de juego
 POST http://localhost:3000/api/tipoJuego
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### modificar un tipo de juego (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/tipoJuego/6678c77bc7b71bfc1cabbab5
+PUT http://localhost:3000/api/tipoJuego/668ab22108b137db2165e022
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 }  
 
 ### modificar un tipo de juego (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/tipoJuego/6678c77bc7b71bfc1cabbab5
+PATCH http://localhost:3000/api/tipoJuego/668ab22108b137db2165e022
 Content-Type: application/json
 
 {
@@ -31,4 +31,4 @@ Content-Type: application/json
 }
 
 ### borrar un tipo de juego
-DELETE http://localhost:3000/api/tipoJuego/6678b1d8104f3b943790defe
+DELETE http://localhost:3000/api/tipoJuego/668ab4ac5bd9ea1dd5316942

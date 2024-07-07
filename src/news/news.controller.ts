@@ -1,8 +1,6 @@
 import { News } from './news.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { NewsRepository } from './news.repository.js'
-import { title } from 'process'
-
 
 const repository = new NewsRepository()
 

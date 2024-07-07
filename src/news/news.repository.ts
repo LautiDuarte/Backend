@@ -2,7 +2,6 @@ import { Repository } from '../shared/repository.js'
 import { News } from './news.entity.js'
 import { db } from '../shared/db/conn.js'
 import { ObjectId } from 'mongodb'
-import { after } from 'node:test'
 
 const news = db.collection<News>('news')
 

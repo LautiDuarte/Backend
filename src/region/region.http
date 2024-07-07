@@ -1,0 +1,34 @@
+###obtener todas las regiones
+GET http://localhost:3000/api/region
+
+### obtener una region
+GET http://localhost:3000/api/region/668ab6467d235c15d62d5566
+
+### crear una nueva region
+POST http://localhost:3000/api/region
+Content-Type: application/json
+
+{
+  "name": "Arg",
+  "description": "El pais mas pijudo"
+}
+
+### modificar una region (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/region/668ab4ca5bd9ea1dd5316943
+Content-Type: application/json
+
+{
+  "name": "Brasil",
+  "description": "segundones"
+}  
+
+### modificar una region (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/region/668ab4ca5bd9ea1dd5316943
+Content-Type: application/json
+
+{
+  "descripcion": "segundones x2"
+}
+
+### borrar una region
+DELETE http://localhost:3000/api/region/668ab6db7d235c15d62d5567
