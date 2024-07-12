@@ -1,10 +1,14 @@
 ###obtener todas las regiones
 GET http://localhost:3000/api/region
 
+
+@id = {{createRegion.response.body.data.id}}
+
 ### obtener una region
-GET http://localhost:3000/api/region/668ab6467d235c15d62d5566
+GET http://localhost:3000/api/region/{{id}}
 
 ### crear una nueva region
+# @name createRegion
 POST http://localhost:3000/api/region
 Content-Type: application/json
 
@@ -14,7 +18,7 @@ Content-Type: application/json
 }
 
 ### modificar una region (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/region/668ab4ca5bd9ea1dd5316943
+PUT http://localhost:3000/api/region/{{id}}
 Content-Type: application/json
 
 {
@@ -23,12 +27,12 @@ Content-Type: application/json
 }  
 
 ### modificar una region (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/region/668ab4ca5bd9ea1dd5316943
+PATCH http://localhost:3000/api/region/{{id}}
 Content-Type: application/json
 
 {
-  "descripcion": "segundones x2"
+  "description": "segundones x2"
 }
 
 ### borrar una region
-DELETE http://localhost:3000/api/region/668ab6db7d235c15d62d5567
+DELETE http://localhost:3000/api/region/{{id}}

@@ -1,8 +1,8 @@
-import { Region } from "./region.entity.js"
-import { Request, Response, NextFunction } from "express"
-import { RegionRepository } from "./region.repository.js"
+import { Region } from './region.entity.js'
+import { Request, Response, NextFunction } from 'express'
+import { orm } from '../shared/db/orm.js'
 
-const repository = new RegionRepository()
+const em = orm.em
 
 function sanitizeregionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
@@ -20,48 +20,59 @@ function sanitizeregionInput(req: Request, res: Response, next: NextFunction) {
 }
 
 async function findAll(req: Request, res: Response) {
-  res.json({ data: await repository.findAll() })
+  try {
+    const regions = await em.find(Region, {})
+    res.status(200).json({ message: 'found all regions', data: regions })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
+
 async function findOne(req: Request, res: Response) {
-  const id = req.params.id
-  const region = await repository.findOne({ id })
-  if (!region) {
-    return res.status(404).send({ message: 'region not found' })
+  try {
+    const id = Number.parseInt(req.params.id)
+    const region = await em.findOneOrFail(Region, { id })
+    res
+      .status(200)
+      .json({ message: 'found region', data: region })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
   }
-  res.json({ data: region })
 }
 
 async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput
-  
-  const regionInput = new Region(
-    input.name,
-    input.description
-  )
-
-  const region = repository.add(regionInput)
-  return res.status(201).send({ message: 'region created', data: region })
+  try {
+    const region = em.create(Region, req.body)
+    await em.flush()
+    res
+      .status(201)
+      .json({ message: 'region created', data: region })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 async function update(req: Request, res: Response) {
-  const region = await repository.update(req.params.id, req.body.sanitizedInput)
-
-  if (!region) {
-    return res.status(404).send({ message: 'region not found' })
+  try {
+    const id = Number.parseInt(req.params.id)
+    const region = em.getReference(Region, id)
+    em.assign(region, req.body)
+    await em.flush()
+    res.status(200).json({ message: 'region updated' })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
   }
-
-  return res.status(200).send({ message: 'region updated successfully', data: region })
 }
 
 async function remove(req: Request, res: Response) {
-  const id = req.params.id
-  const region = await repository.delete({ id })
-
-  if (!region) {
-    res.status(404).send({ message: 'region not found' })
-  } else {
-    res.status(200).send({ message: 'region deleted successfully' })
+  try {
+    const id = Number.parseInt(req.params.id)
+    const region = em.getReference(Region, id)
+    await em.removeAndFlush(region)
+    res.status(200).send({ message: 'region deleted' })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
   }
 }
 

@@ -1,14 +1,13 @@
-import { News } from './news.entity.js'
+import { GameType } from './gameType.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
-
-function sanitizenewsInput(req: Request, res: Response, next: NextFunction) {
+function sanitizegameTypeInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    title: req.body.title,
-    body: req.body.body,
+    name: req.body.name,
+    description: req.body.description,
   }
 
 
@@ -22,8 +21,8 @@ function sanitizenewsInput(req: Request, res: Response, next: NextFunction) {
 
 async function findAll(req: Request, res: Response) {
   try {
-    const news = await em.find(News, {})
-    res.status(200).json({ message: 'found all news', data: news })
+    const gametypes = await em.find(GameType, {})
+    res.status(200).json({ message: 'found all gametypes', data: gametypes })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -32,10 +31,10 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const news = await em.findOneOrFail(News, { id })
+    const gametype = await em.findOneOrFail(GameType, { id })
     res
       .status(200)
-      .json({ message: 'found news', data: news })
+      .json({ message: 'found gametype', data: gametype })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -43,11 +42,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const news = em.create(News, req.body)
+    const gametype = em.create(GameType, req.body)
     await em.flush()
     res
       .status(201)
-      .json({ message: 'news created', data: news })
+      .json({ message: 'gametype created', data: gametype })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -57,10 +56,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const news = em.getReference(News, id)
-    em.assign(news, req.body)
+    const gametype = em.getReference(GameType, id)
+    em.assign(gametype, req.body)
     await em.flush()
-    res.status(200).json({ message: 'news updated' })
+    res.status(200).json({ message: 'gametype updated' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -69,12 +68,12 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const news = em.getReference(News, id)
-    await em.removeAndFlush(news)
-    res.status(200).send({ message: 'news deleted' })
+    const gametype = em.getReference(GameType, id)
+    await em.removeAndFlush(gametype)
+    res.status(200).send({ message: 'gametype deleted' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizenewsInput, findAll, findOne, add, update, remove }
+export { sanitizegameTypeInput, findAll, findOne, add, update, remove }

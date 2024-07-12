@@ -1,10 +1,14 @@
-###obtener todas las noticias
+###GET ALL
 GET http://localhost:3000/api/news
 
-### obtener una noticia
-GET http://localhost:3000/api/news/668ab5295bd9ea1dd5316944
 
-### crear una nueva noticia
+@id = {{createNews.response.body.data.id}}
+
+###GET ONE
+GET http://localhost:3000/api/news/{{id}}
+
+###POST
+# @name createNews
 POST http://localhost:3000/api/news
 Content-Type: application/json
 
@@ -13,8 +17,8 @@ Content-Type: application/json
   "body": "A la vuelta de la esquina"
 }
 
-### modificar una noticia (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/news/668ab5295bd9ea1dd5316944
+###PUT
+PUT http://localhost:3000/api/news/{{id}}
 Content-Type: application/json
 
 {
@@ -22,13 +26,13 @@ Content-Type: application/json
   "body": "jugamos un lol?"
 }  
 
-### modificar una noticia (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/news/668ab5295bd9ea1dd5316944
+###PATCH
+PATCH http://localhost:3000/api/news/{{id}}
 Content-Type: application/json
 
 {
   "body": "sentado en la esquina"
 }
 
-### borrar una noticia
-DELETE http://localhost:3000/api/news/668ab5295bd9ea1dd5316944
+###DELETE
+DELETE http://localhost:3000/api/news/{{id}}

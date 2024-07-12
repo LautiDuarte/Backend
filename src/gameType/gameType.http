@@ -1,0 +1,38 @@
+###GET ALL
+GET http://localhost:3000/api/gameType
+
+###POST
+# @name createGameType
+POST http://localhost:3000/api/gameType
+Content-Type: application/json
+
+{
+  "name": "shooter",
+  "description": "Juego de disparos y accion"
+}
+
+###ID
+@id = {{createGameType.response.body.data.id}}
+
+###GET ONE
+GET http://localhost:3000/api/gameType/{{id}}
+
+###PUT
+PUT http://localhost:3000/api/gameType/{{id}}
+Content-Type: application/json
+
+{
+  "name": "RPG",
+  "description": "Juego de roles"
+}  
+
+###PATCH
+PATCH http://localhost:3000/api/gameType/{{id}}
+Content-Type: application/json
+
+{
+  "description": "Género que se caracteriza por ofrecer al jugador la posibilidad de asumir el papel de uno o varios personajes en un mundo ficticio"
+}
+
+###DELETE
+DELETE http://localhost:3000/api/gameType/{{id}}
