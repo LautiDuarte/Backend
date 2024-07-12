@@ -6,8 +6,8 @@ const repository = new RegionRepository()
 
 function sanitizeregionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    name: req.body.title,
-    description: req.body.body,
+    name: req.body.name,
+    description: req.body.description,
   }
 
 
