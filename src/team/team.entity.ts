@@ -1,7 +1,8 @@
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Collection, Entity, ManyToMany, Property } from '@mikro-orm/core'
+import { Cascade, Collection, Entity, ManyToMany, OneToMany, Property } from '@mikro-orm/core'
 import { User } from '../user/user.entity.js'
 import { Competition } from '../competition/competition.entity.js'
+import { Inscription } from '../inscription/inscription.entity.js'
 
 @Entity()
 export class Team extends BaseEntity{
@@ -13,4 +14,9 @@ export class Team extends BaseEntity{
 
     @ManyToMany(() => Competition, (competition) => competition.teams)
     competitions = new Collection<Competition>(this)
+
+    @OneToMany(() => Inscription, (inscription) => inscription.team, {
+    cascade: [Cascade.ALL],
+    })
+    registrations = new Collection<Inscription>(this)
 }

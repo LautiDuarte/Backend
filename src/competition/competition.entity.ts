@@ -1,9 +1,10 @@
 import { Game } from '../game/game.entity.js'
 import { Region } from '../region/region.entity.js'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Cascade, DateTimeType, Entity, ManyToMany, ManyToOne, Property, Rel } from '@mikro-orm/core'
+import { Cascade, Collection, DateTimeType, Entity, ManyToMany, ManyToOne, OneToMany, Property, Rel } from '@mikro-orm/core'
 import { Team } from '../team/team.entity.js'
 import { User } from '../user/user.entity.js'
+import { Inscription } from '../inscription/inscription.entity.js'
 
 @Entity()
 export class Competition extends BaseEntity{
@@ -37,4 +38,9 @@ export class Competition extends BaseEntity{
     //revisar como crear la competicion:
     @ManyToOne(() => User, { nullable: false })
     userCreator!: Rel<User>
+
+    @OneToMany(() => Inscription, (inscription) => inscription.competition, {
+    cascade: [Cascade.ALL],
+    })
+    registrations = new Collection<Inscription>(this)
 }
