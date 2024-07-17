@@ -42,7 +42,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const gametype = em.create(GameType, req.body)
+    const gametype = em.create(GameType, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
@@ -57,7 +57,7 @@ async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
     const gametype = em.getReference(GameType, id)
-    em.assign(gametype, req.body)
+    em.assign(gametype, req.body.sanitizedInput)
     await em.flush()
     res.status(200).json({ message: 'gametype updated' })
   } catch (error: any) {

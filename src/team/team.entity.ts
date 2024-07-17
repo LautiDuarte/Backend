@@ -6,17 +6,23 @@ import { Inscription } from '../inscription/inscription.entity.js'
 
 @Entity()
 export class Team extends BaseEntity{
-    @Property({nullable:false, unique:true})
+    @Property({
+        nullable:false, 
+        unique:true
+    })
     name!: string
 
     @ManyToMany(() => User, (user) => user.teams)
     players = new Collection<User>(this)
 
-    @ManyToMany(() => Competition, (competition) => competition.teams)
+    @ManyToMany(() => Competition, (competition) => competition.teams, {
+        nullable: true
+    })
     competitions = new Collection<Competition>(this)
 
     @OneToMany(() => Inscription, (inscription) => inscription.team, {
-    cascade: [Cascade.ALL],
+        cascade: [Cascade.ALL],
+        nullable: true
     })
     registrations = new Collection<Inscription>(this)
 }

@@ -1,0 +1,46 @@
+###GET ALL
+GET http://localhost:3000/api/competition
+
+
+@id = {{competitionCreator.response.body.data.id}}
+
+###GET ONE
+GET http://localhost:3000/api/competition/{{id}}
+
+###POST
+# @name competitionCreator
+POST http://localhost:3000/api/competition
+Content-Type: application/json
+
+{
+  "name": "Speedrun minecraft competition",
+  "type": "free",
+  "game": 2,
+  "region": 1,
+  "userCreator": 2
+}
+
+###PUT
+PUT http://localhost:3000/api/competition/{{id}}
+Content-Type: application/json
+
+{
+  "name": "CS:GO tournament",
+  "type": "not free",
+  "game": 3,
+  "region": 2,
+  "userCreator": 1,
+  "teams": [1]
+}
+
+###PATCH
+PATCH http://localhost:3000/api/competition/{{id}}
+Content-Type: application/json
+
+{
+  "name": "Minecraft UHC",
+  "game": 1
+}
+
+###DELETE
+DELETE http://localhost:3000/api/competition/{{id}}

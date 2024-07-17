@@ -11,7 +11,8 @@ export class Region extends BaseEntity{
     description!: string
 
     @OneToMany(() => Competition, (competition) => competition.region, {
-    cascade: [Cascade.ALL],
+        cascade: [Cascade.ALL],
+        nullable: true
     })
     competitions = new Collection<Competition>(this)
 }

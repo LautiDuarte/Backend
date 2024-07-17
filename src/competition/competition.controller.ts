@@ -1,15 +1,18 @@
-import { Inscription } from './inscription.entity.js'
+import { Competition } from './competition.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
-function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunction) {
+function sanitizecompetitionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    date: req.body.date,
-    status: req.body.status,
-    competition: req.body.competition,
-    team: req.body.team
+    name: req.body.name,
+    type: req.body.type,
+    game: req.body.game,
+    region: req.body.region,
+    teams: req.body.teams,
+    userCreator: req.body.userCreator,
+    registrations: req.body.registrations
   }
 
 
@@ -23,12 +26,12 @@ function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunctio
 
 async function findAll(req: Request, res: Response) {
   try {
-    const inscriptions = await em.find(
-      Inscription, 
+    const competitions = await em.find(
+      Competition, 
       {},
-      { populate: ['competition', 'team'] }
+      { populate: ['game', 'region', 'teams', 'userCreator', 'registrations'] }
     )
-    res.status(200).json({ message: 'found all inscriptions', data: inscriptions })
+    res.status(200).json({ message: 'found all competitions', data: competitions })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -38,14 +41,14 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = await em.findOneOrFail(
-      Inscription, 
+    const competition = await em.findOneOrFail(
+      Competition,
       { id },
-      { populate: ['competition', 'team'] }
+      { populate: ['game', 'region', 'teams', 'userCreator', 'registrations'] }
     )
     res
       .status(200)
-      .json({ message: 'found inscription', data: inscription })
+      .json({ message: 'found competition', data: competition })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -53,11 +56,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const inscription = em.create(Inscription, req.body.sanitizedInput)
+    const competition = em.create(Competition, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
-      .json({ message: 'inscription created', data: inscription })
+      .json({ message: 'competition created', data: competition })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -66,10 +69,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = em.getReference(Inscription, id)
-    em.assign(inscription, req.body.sanitizedInput)
+    const competition = em.getReference(Competition, id)
+    em.assign(competition, req.body.sanitizedInput)
     await em.flush()
-    res.status(200).json({ message: 'inscription updated' })
+    res.status(200).json({ message: 'competition updated' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -78,12 +81,12 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = em.getReference(Inscription, id)
-    await em.removeAndFlush(inscription)
-    res.status(200).send({ message: 'inscription deleted' })
+    const competition = em.getReference(Competition, id)
+    await em.removeAndFlush(competition)
+    res.status(200).send({ message: 'competition deleted' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizeinscriptionInput, findAll, findOne, add, update, remove }
+export { sanitizecompetitionInput, findAll, findOne, add, update, remove }

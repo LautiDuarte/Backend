@@ -1,0 +1,41 @@
+###GET ALL
+GET http://localhost:3000/api/game
+
+
+@id = {{gameCreator.response.body.data.id}}
+
+###GET ONE
+GET http://localhost:3000/api/game/{{id}}
+
+###POST
+# @name gameCreator
+POST http://localhost:3000/api/game
+Content-Type: application/json
+
+{
+  "name": "CS:GO",
+  "description": "CT y TT se cagan a palos",
+  "gameType": 8
+}
+
+###PUT
+PUT http://localhost:3000/api/game/{{id}}
+Content-Type: application/json
+
+{
+  "name": "CS:GO",
+  "description": "Disparos",
+  "gameType": 8
+}
+
+
+###PATCH
+PATCH http://localhost:3000/api/game/{{id}}
+Content-Type: application/json
+
+{
+  "name": "MC"
+}
+
+###DELETE
+DELETE http://localhost:3000/api/game/{{id}}

@@ -1,15 +1,15 @@
-import { Inscription } from './inscription.entity.js'
+import { Game } from './game.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
-function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunction) {
+function sanitizegameInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    date: req.body.date,
-    status: req.body.status,
-    competition: req.body.competition,
-    team: req.body.team
+    name: req.body.name,
+    description: req.body.description,
+    gameType: req.body.gameType,
+    competitions: req.body.competitions
   }
 
 
@@ -23,12 +23,12 @@ function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunctio
 
 async function findAll(req: Request, res: Response) {
   try {
-    const inscriptions = await em.find(
-      Inscription, 
+    const games = await em.find(
+      Game, 
       {},
-      { populate: ['competition', 'team'] }
+      { populate: ['gameType', 'competitions'] }
     )
-    res.status(200).json({ message: 'found all inscriptions', data: inscriptions })
+    res.status(200).json({ message: 'found all games', data: games })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -38,14 +38,14 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = await em.findOneOrFail(
-      Inscription, 
+    const game = await em.findOneOrFail(
+      Game,
       { id },
-      { populate: ['competition', 'team'] }
+      { populate: ['gameType', 'competitions'] }
     )
     res
       .status(200)
-      .json({ message: 'found inscription', data: inscription })
+      .json({ message: 'found game', data: game })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -53,11 +53,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const inscription = em.create(Inscription, req.body.sanitizedInput)
+    const game = em.create(Game, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
-      .json({ message: 'inscription created', data: inscription })
+      .json({ message: 'game created', data: game })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -66,10 +66,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = em.getReference(Inscription, id)
-    em.assign(inscription, req.body.sanitizedInput)
+    const game = em.getReference(Game, id)
+    em.assign(game, req.body.sanitizedInput)
     await em.flush()
-    res.status(200).json({ message: 'inscription updated' })
+    res.status(200).json({ message: 'game updated' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -78,12 +78,12 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = em.getReference(Inscription, id)
-    await em.removeAndFlush(inscription)
-    res.status(200).send({ message: 'inscription deleted' })
+    const game = em.getReference(Game, id)
+    await em.removeAndFlush(game)
+    res.status(200).send({ message: 'game deleted' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizeinscriptionInput, findAll, findOne, add, update, remove }
+export { sanitizegameInput, findAll, findOne, add, update, remove }

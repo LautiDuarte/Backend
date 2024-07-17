@@ -1,0 +1,39 @@
+###GET ALL
+GET http://localhost:3000/api/team
+
+
+@id = {{createTeam.response.body.data.id}}
+
+###GET ONE
+GET http://localhost:3000/api/team/{{id}}
+
+###POST
+# @name createTeam
+POST http://localhost:3000/api/team
+Content-Type: application/json
+
+{
+  "name": "Escuadron Salchichon",
+  "players": [1]
+}
+
+###PUT
+PUT http://localhost:3000/api/team/{{id}}
+Content-Type: application/json
+
+{
+  "name": "Escuadron Maravilla",
+  "players": [2]
+}  
+
+###PATCH
+PATCH http://localhost:3000/api/team/{{id}}
+Content-Type: application/json
+
+{
+  "name": "Scaloneta",
+  "players": [2,3]
+}
+
+###DELETE
+DELETE http://localhost:3000/api/team/{{id}}

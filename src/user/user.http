@@ -1,0 +1,46 @@
+###GET ALL
+GET http://localhost:3000/api/user
+
+
+@id = {{createUser.response.body.data.id}}
+
+###GET ONE
+GET http://localhost:3000/api/user/{{id}}
+
+###POST
+# @name createUser
+POST http://localhost:3000/api/user
+Content-Type: application/json
+
+{
+  "name": "Felipe",
+  "lastName": "Zurita",
+  "alias": "feligay",
+  "email": "feligay@gmail.com",
+  "password": "ashe"
+}
+
+###PUT
+PUT http://localhost:3000/api/user/{{id}}
+Content-Type: application/json
+
+{
+  "name": "Santiago",
+  "lastName": "Capriotti",
+  "alias": "santigay",
+  "email": "santigay@gmail.com",
+  "password": "que pasa martu?"
+}  
+
+###PATCH
+PATCH http://localhost:3000/api/user/{{id}}
+Content-Type: application/json
+
+{
+  "alias": "CaravanaNOB",
+  "email": "carnaval@carnaval.com",
+  "password":"el carnaval es el pueblo y el pueblo es hincha de central"
+}
+
+###DELETE
+DELETE http://localhost:3000/api/user/{{id}}

@@ -1,38 +1,42 @@
 ###GET ALL
-GET http://localhost:3000/api/inscriptions
+GET http://localhost:3000/api/inscription
 
 
-@id = {{createInscriptions.response.body.data.id}}
+@id = {{createInscription.response.body.data.id}}
 
 ###GET ONE
-GET http://localhost:3000/api/inscriptions/{{id}}
+GET http://localhost:3000/api/inscription/{{id}}
 
 ###POST
-# @name createInscriptions
-POST http://localhost:3000/api/inscriptions
+# @name createInscription
+POST http://localhost:3000/api/inscription
 Content-Type: application/json
 
 {
-  "team": "Escuadron Salchichon",
-  "state": "Approved"
+  "date": "2024-07-17",
+  "status": "Approved",
+  "competition": 1,
+  "team": 1
 }
 
 ###PUT
-PUT http://localhost:3000/api/inscriptions/{{id}}
+PUT http://localhost:3000/api/inscription/{{id}}
 Content-Type: application/json
 
 {
-  "team": "Escuadron Maravilla",
-  "state": "Pending"
+  "date": "2024-08-20",
+  "status": "Pending",
+  "competition": 1,
+  "team": 1
 }  
 
 ###PATCH
-PATCH http://localhost:3000/api/inscriptions/{{id}}
+PATCH http://localhost:3000/api/inscription/{{id}}
 Content-Type: application/json
 
 {
-  "team": "Scaloneta"
+  "status":"Rejected"
 }
 
 ###DELETE
-DELETE http://localhost:3000/api/inscriptions/{{id}}
+DELETE http://localhost:3000/api/inscription/{{id}}

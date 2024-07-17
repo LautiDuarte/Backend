@@ -5,30 +5,32 @@ import { Competition } from '../competition/competition.entity.js'
 
 @Entity()
 export class User extends BaseEntity{
-    @Property({nullable:false, unique:true})
+    @Property({nullable:false})
     name!: string
 
     @Property({nullable:false})
     lastName!: string
 
-    @Property({nullable:false})
+    @Property({nullable:false, unique: true})
     alias!: string
 
-    @Property({nullable:false})
+    @Property({nullable:false, unique: true})
     email!: string
 
     @Property({nullable:false})
     password!: string
 
     @ManyToMany(() => Team, (team) => team.players, {
-    cascade: [Cascade.ALL],
-    owner: true,
+        cascade: [Cascade.ALL],
+        owner: true,
+        nullable: true
     })
-    teams!: Team[]
+    teams = new Collection<Team>(this)
 
     //revisar como crear la competicion:
     @OneToMany(() => Competition, (competition) => competition.userCreator, {
-    cascade: [Cascade.ALL],
+        cascade: [Cascade.ALL],
+        nullable: true
     })
     competitionsCreated = new Collection<Competition>(this)
 }

@@ -4,14 +4,19 @@ import { Entity, Property, Cascade, OneToMany, Collection } from '@mikro-orm/cor
 
 @Entity()
 export class GameType extends BaseEntity{
-    @Property({nullable:false, unique:true})
+    @Property({
+        nullable:false, 
+        unique:true})
     name!: string
 
-    @Property({nullable:false})
+    @Property({
+        nullable:false
+    })
     description!: string   
     
     @OneToMany(() => Game, (game) => game.gameType, {
-    cascade: [Cascade.ALL],
+        cascade: [Cascade.ALL],
+        nullable: true
     })
     games = new Collection<Game>(this)
 }

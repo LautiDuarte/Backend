@@ -5,17 +5,25 @@ import { Entity, Property, ManyToOne, Rel, OneToMany, Cascade, Collection } from
 
 @Entity()
 export class Game extends BaseEntity{
-    @Property({nullable:false, unique:true})
+    @Property({
+        nullable:false, 
+        unique:true
+    })
     name!: string
 
-    @Property({nullable:false})
+    @Property({
+        nullable:false
+    })
     description!: string
     
-    @ManyToOne(() => GameType, { nullable: false })
+    @ManyToOne(() => GameType, { 
+        nullable: false 
+    })
     gameType!: Rel<GameType>
 
     @OneToMany(() => Competition, (competition) => competition.game, {
-    cascade: [Cascade.ALL],
+        cascade: [Cascade.ALL],
+        nullable: true
     })
     competitions = new Collection<Competition>(this)
 }

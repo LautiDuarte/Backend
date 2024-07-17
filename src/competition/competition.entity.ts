@@ -8,10 +8,14 @@ import { Inscription } from '../inscription/inscription.entity.js'
 
 @Entity()
 export class Competition extends BaseEntity{
-    @Property({nullable:false, unique:true})
+    @Property({
+        nullable:false, 
+        unique:true})
     name!: string
 
-    @Property({nullable:false})
+    @Property({
+        nullable:false
+    })
     type!: string
 
     //revisar la declaracion de estas fechas, ni idea si esta bien
@@ -23,24 +27,32 @@ export class Competition extends BaseEntity{
     dateEnding!: Date
     */
 
-    @ManyToOne(() => Game, { nullable: false })
+    @ManyToOne(() => Game, {
+        nullable: false 
+    })
     game!: Rel<Game>
 
-    @ManyToOne(() => Region, { nullable: false })
+    @ManyToOne(() => Region, {
+        nullable: false 
+    })
     region!: Rel<Region>
 
     @ManyToMany(() => Team, (team) => team.competitions, {
-    cascade: [Cascade.ALL],
-    owner: true,
+        cascade: [Cascade.ALL],
+        nullable: true,
+        owner: true
     })
-    teams!: Team[]
+    teams = new Collection<Team>(this)
 
     //revisar como crear la competicion:
-    @ManyToOne(() => User, { nullable: false })
+    @ManyToOne(() => User, {
+        nullable: false 
+    })
     userCreator!: Rel<User>
 
     @OneToMany(() => Inscription, (inscription) => inscription.competition, {
-    cascade: [Cascade.ALL],
+        cascade: [Cascade.ALL],
+        nullable: true
     })
     registrations = new Collection<Inscription>(this)
 }

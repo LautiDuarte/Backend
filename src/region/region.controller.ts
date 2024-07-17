@@ -8,6 +8,7 @@ function sanitizeregionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
     description: req.body.description,
+    competitions: req.body.competitions
   }
 
 
@@ -21,7 +22,11 @@ function sanitizeregionInput(req: Request, res: Response, next: NextFunction) {
 
 async function findAll(req: Request, res: Response) {
   try {
-    const regions = await em.find(Region, {})
+    const regions = await em.find(
+      Region, 
+      {},
+      { populate: ['competitions'] }
+    )
     res.status(200).json({ message: 'found all regions', data: regions })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -32,7 +37,11 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const region = await em.findOneOrFail(Region, { id })
+    const region = await em.findOneOrFail(
+      Region,
+      { id },
+      { populate: ['competitions'] }
+    )
     res
       .status(200)
       .json({ message: 'found region', data: region })
@@ -43,7 +52,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const region = em.create(Region, req.body)
+    const region = em.create(Region, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
@@ -57,7 +66,7 @@ async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
     const region = em.getReference(Region, id)
-    em.assign(region, req.body)
+    em.assign(region, req.body.sanitizedInput)
     await em.flush()
     res.status(200).json({ message: 'region updated' })
   } catch (error: any) {

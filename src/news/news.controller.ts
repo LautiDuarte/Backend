@@ -43,7 +43,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const news = em.create(News, req.body)
+    const news = em.create(News, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
@@ -58,7 +58,7 @@ async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
     const news = em.getReference(News, id)
-    em.assign(news, req.body)
+    em.assign(news, req.body.sanitizedInput)
     await em.flush()
     res.status(200).json({ message: 'news updated' })
   } catch (error: any) {

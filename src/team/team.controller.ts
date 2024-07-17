@@ -1,15 +1,15 @@
-import { Inscription } from './inscription.entity.js'
+import { Team } from './team.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
-function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunction) {
+function sanitizeteamInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    date: req.body.date,
-    status: req.body.status,
-    competition: req.body.competition,
-    team: req.body.team
+    name: req.body.name,
+    players: req.body.players,
+    competitions: req.body.competitions,
+    registrations: req.body.registrations
   }
 
 
@@ -23,12 +23,12 @@ function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunctio
 
 async function findAll(req: Request, res: Response) {
   try {
-    const inscriptions = await em.find(
-      Inscription, 
+    const teams = await em.find(
+      Team, 
       {},
-      { populate: ['competition', 'team'] }
+      { populate: ['competitions', 'players', 'registrations'] }
     )
-    res.status(200).json({ message: 'found all inscriptions', data: inscriptions })
+    res.status(200).json({ message: 'found all teams', data: teams })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -38,14 +38,14 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = await em.findOneOrFail(
-      Inscription, 
+    const team = await em.findOneOrFail(
+      Team, 
       { id },
-      { populate: ['competition', 'team'] }
+      { populate: ['competitions', 'players', 'registrations'] }
     )
     res
       .status(200)
-      .json({ message: 'found inscription', data: inscription })
+      .json({ message: 'found team', data: team })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -53,11 +53,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const inscription = em.create(Inscription, req.body.sanitizedInput)
+    const team = em.create(Team, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
-      .json({ message: 'inscription created', data: inscription })
+      .json({ message: 'team created', data: team })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -66,10 +66,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = em.getReference(Inscription, id)
-    em.assign(inscription, req.body.sanitizedInput)
+    const team = em.getReference(Team, id)
+    em.assign(team, req.body.sanitizedInput)
     await em.flush()
-    res.status(200).json({ message: 'inscription updated' })
+    res.status(200).json({ message: 'team updated' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -78,12 +78,12 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = em.getReference(Inscription, id)
-    await em.removeAndFlush(inscription)
-    res.status(200).send({ message: 'inscription deleted' })
+    const team = em.getReference(Team, id)
+    await em.removeAndFlush(team)
+    res.status(200).send({ message: 'team deleted' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizeinscriptionInput, findAll, findOne, add, update, remove }
+export { sanitizeteamInput, findAll, findOne, add, update, remove }

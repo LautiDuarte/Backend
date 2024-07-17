@@ -7,8 +7,8 @@ POST http://localhost:3000/api/gameType
 Content-Type: application/json
 
 {
-  "name": "shooter",
-  "description": "Juego de disparos y accion"
+  "name": "Shooter",
+  "description": "Juego de disparos y armas"
 }
 
 ###ID
