@@ -53,6 +53,10 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
+    const players = req.body.sanitizedInput.players;
+      if (players.length > 5){
+        return res.status(400).json({message: 'A team cannot have more than 5 players'});
+      }
     const team = em.create(Team, req.body.sanitizedInput)
     await em.flush()
     res
@@ -65,6 +69,10 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
+    const players = req.body.sanitizedInput.players;
+      if (players.length > 5){
+        return res.status(400).json({message: 'A team cannot have more than 5 players'});
+      }
     const id = Number.parseInt(req.params.id)
     const team = em.getReference(Team, id)
     em.assign(team, req.body.sanitizedInput)
