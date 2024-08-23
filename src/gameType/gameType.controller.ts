@@ -22,7 +22,7 @@ function sanitizegameTypeInput(req: Request, res: Response, next: NextFunction) 
 async function findAll(req: Request, res: Response) {
   try {
     const gametypes = await em.find(GameType, {})
-    res.status(200).json({ message: 'found all gametypes', data: gametypes })
+    res.status(200).json(gametypes)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

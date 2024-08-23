@@ -10,9 +10,18 @@ import { teamRouter } from './team/team.routes.js'
 import { userRouter } from './user/user.routes.js'
 import { competitionRouter } from './competition/competition.routes.js'
 import { gameRouter } from './game/game.routes.js'
+import cors from 'cors'
 
 const app = express()
 app.use(express.json())
+
+const corsOptions = {
+  origin: 'http://localhost:4200', // Permitir solicitudes desde este origen
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers permitidos
+};
+
+app.use(cors(corsOptions))
 
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next)
