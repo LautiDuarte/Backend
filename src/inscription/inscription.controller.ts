@@ -7,6 +7,7 @@ const em = orm.em
 function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     date: req.body.date,
+    score: req.body.score,
     status: req.body.status,
     competition: req.body.competition,
     team: req.body.team
