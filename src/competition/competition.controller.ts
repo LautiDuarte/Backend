@@ -8,9 +8,10 @@ function sanitizecompetitionInput(req: Request, res: Response, next: NextFunctio
   req.body.sanitizedInput = {
     name: req.body.name,
     type: req.body.type,
+    dateStart: req.body.dateStart,
+    dateEnding: req.body.dateEnding,
     game: req.body.game,
     region: req.body.region,
-    teams: req.body.teams,
     userCreator: req.body.userCreator,
     registrations: req.body.registrations
   }
@@ -29,7 +30,7 @@ async function findAll(req: Request, res: Response) {
     const competitions = await em.find(
       Competition, 
       {},
-      { populate: ['game', 'region', 'teams', 'userCreator', 'registrations'] }
+      { populate: ['game', 'region', 'userCreator', 'registrations'] }
     )
     res.status(200).json({ message: 'found all competitions', data: competitions })
   } catch (error: any) {
@@ -44,7 +45,7 @@ async function findOne(req: Request, res: Response) {
     const competition = await em.findOneOrFail(
       Competition,
       { id },
-      { populate: ['game', 'region', 'teams', 'userCreator', 'registrations'] }
+      { populate: ['game', 'region', 'userCreator', 'registrations'] }
     )
     res
       .status(200)

@@ -8,7 +8,6 @@ function sanitizeteamInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
     players: req.body.players,
-    competitions: req.body.competitions,
     registrations: req.body.registrations
   }
 
@@ -26,7 +25,7 @@ async function findAll(req: Request, res: Response) {
     const teams = await em.find(
       Team, 
       {},
-      { populate: ['competitions', 'players', 'registrations'] }
+      { populate: ['players', 'registrations'] }
     )
     res.status(200).json({ message: 'found all teams', data: teams })
   } catch (error: any) {
@@ -41,7 +40,7 @@ async function findOne(req: Request, res: Response) {
     const team = await em.findOneOrFail(
       Team, 
       { id },
-      { populate: ['competitions', 'players', 'registrations'] }
+      { populate: ['players', 'registrations'] }
     )
     res
       .status(200)
