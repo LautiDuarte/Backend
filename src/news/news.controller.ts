@@ -23,7 +23,7 @@ function sanitizenewsInput(req: Request, res: Response, next: NextFunction) {
 async function findAll(req: Request, res: Response) {
   try {
     const news = await em.find(News, {})
-    res.status(200).json({ message: 'found all news', data: news })
+    res.status(200).json(news)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -35,7 +35,7 @@ async function findOne(req: Request, res: Response) {
     const news = await em.findOneOrFail(News, { id })
     res
       .status(200)
-      .json({ message: 'found news', data: news })
+      .json(news)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -47,7 +47,7 @@ async function add(req: Request, res: Response) {
     await em.flush()
     res
       .status(201)
-      .json({ message: 'news created', data: news })
+      .json(news)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -60,7 +60,7 @@ async function update(req: Request, res: Response) {
     const news = em.getReference(News, id)
     em.assign(news, req.body.sanitizedInput)
     await em.flush()
-    res.status(200).json({ message: 'news updated' })
+    res.status(200).json()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -71,7 +71,7 @@ async function remove(req: Request, res: Response) {
     const id = Number.parseInt(req.params.id)
     const news = em.getReference(News, id)
     await em.removeAndFlush(news)
-    res.status(200).send({ message: 'news deleted' })
+    res.status(200).send()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
