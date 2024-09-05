@@ -58,19 +58,30 @@ async function findOne(req: Request, res: Response) {
 
 async function newUser(req:Request, res:Response) {
   try{
-    const { userName } = req.body;
+    const { userName, email } = req.body;
 
     //validamos si el usuario ya existe en la base de datos
     const existingUser = await em.findOne(User, { userName });
-    if (existingUser){
+    if (existingUser) {
       return res
         .status(500)
-        .json({ message: `Ya existe un usuario con el userName ${userName}` });
-    }  
+        .json({ message: `El nombre de usuario ${userName} ya está en uso.` });
+    }
+
+    //validamos si el email ya existe en la base de datos
+    const existingEmail = await em.findOne(User, { email });
+    if (existingEmail) {
+      return res
+        .status(500)
+        .json({ message: `El email ${email} ya está registrado.` });
+    }
 
     // Si no existe, procedemos con la creación del usuario
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = em.create(User, { ...req.body.sanitizedInput, password: hashedPassword});
+    const user = em.create(User, {
+      ...req.body.sanitizedInput,
+      password: hashedPassword,
+    });
     await em.flush();
     res.status(201).json(user);
   } catch (error: any) {
@@ -94,7 +105,7 @@ async function loginUser(req: Request, res: Response) {
 
   //generamos token
   const token = jwt.sign({ userName: userName }, process.env.SECRET_KEY || 'pepito123');
-  res.json({token});
+  res.json(token);
 }
 
 async function update(req: Request, res: Response) {

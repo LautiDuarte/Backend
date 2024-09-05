@@ -4,9 +4,9 @@ import { validateToken } from '../user/validate-token.js'
 
 export const gameTypeRouter = Router()
 
-gameTypeRouter.get('/', findAll)
+//gameTypeRouter.get('/', findAll)
 // si quiero restringir el getAll haría lo siguiente:
-// gameTypeRouter.get('/',validateToken, findAll)
+gameTypeRouter.get('/',validateToken, findAll)
 gameTypeRouter.get('/:id', findOne)
 gameTypeRouter.post('/', sanitizegameTypeInput, add)
 gameTypeRouter.put('/:id', sanitizegameTypeInput, update)
