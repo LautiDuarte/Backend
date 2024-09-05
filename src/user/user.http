@@ -15,7 +15,7 @@ Content-Type: application/json
 {
   "name": "Felipe",
   "lastName": "Zurita",
-  "alias": "feligay",
+  "userName": "feligay",
   "email": "feligay@gmail.com",
   "password": "ashe"
 }
@@ -27,7 +27,7 @@ Content-Type: application/json
 {
   "name": "Santiago",
   "lastName": "Capriotti",
-  "alias": "santigay",
+  "userName": "santigay",
   "email": "santigay@gmail.com",
   "password": "que pasa martu?"
 }  
@@ -37,7 +37,7 @@ PATCH http://localhost:3000/api/user/{{id}}
 Content-Type: application/json
 
 {
-  "alias": "CaravanaNOB",
+  "userName": "CaravanaNOB",
   "email": "carnaval@carnaval.com",
   "password":"el carnaval es el pueblo y el pueblo es hincha de central"
 }
