@@ -27,7 +27,7 @@ async function findAll(req: Request, res: Response) {
       {},
       { populate: ['competitions'] }
     )
-    res.status(200).json({ message: 'found all regions', data: regions })
+    res.status(200).json(regions)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -44,7 +44,7 @@ async function findOne(req: Request, res: Response) {
     )
     res
       .status(200)
-      .json({ message: 'found region', data: region })
+      .json(region)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -56,7 +56,7 @@ async function add(req: Request, res: Response) {
     await em.flush()
     res
       .status(201)
-      .json({ message: 'region created', data: region })
+      .json(region)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -68,7 +68,7 @@ async function update(req: Request, res: Response) {
     const region = em.getReference(Region, id)
     em.assign(region, req.body.sanitizedInput)
     await em.flush()
-    res.status(200).json({ message: 'region updated' })
+    res.status(200).json()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -79,7 +79,7 @@ async function remove(req: Request, res: Response) {
     const id = Number.parseInt(req.params.id)
     const region = em.getReference(Region, id)
     await em.removeAndFlush(region)
-    res.status(200).send({ message: 'region deleted' })
+    res.status(200).send()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
