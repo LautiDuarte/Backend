@@ -8,4 +8,7 @@ export class News extends BaseEntity{
     
   @Property({nullable:false})
   body!: string
+
+  @Property({nullable:true})
+  image!: string
 }

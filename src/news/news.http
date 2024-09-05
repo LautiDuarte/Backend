@@ -14,7 +14,8 @@ Content-Type: application/json
 
 {
   "title": "Se perdio un caniche",
-  "body": "A la vuelta de la esquina"
+  "body": "A la vuelta de la esquina",
+  "image": ""
 }
 
 ###PUT
@@ -23,7 +24,8 @@ Content-Type: application/json
 
 {
   "title": "Milei llega al 0,000000001% de inflacion",
-  "body": "jugamos un lol?"
+  "body": "jugamos un lol?",
+  "image": ""
 }  
 
 ###PATCH
