@@ -12,7 +12,7 @@ function sanitizecompetitionInput(req: Request, res: Response, next: NextFunctio
     dateEnding: req.body.dateEnding,
     game: req.body.game,
     region: req.body.region,
-//    userCreator: req.body.userCreator,
+    userCreator: req.body.userCreator,
     registrations: req.body.registrations
   }
 
@@ -30,7 +30,7 @@ async function findAll(req: Request, res: Response) {
     const competitions = await em.find(
       Competition, 
       {},
-      { populate: ['game', 'region', /*'userCreator',*/ 'registrations'] }
+      { populate: ['game', 'region', 'userCreator', 'registrations'] }
     )
     res.status(200).json(competitions)
   } catch (error: any) {
@@ -45,7 +45,7 @@ async function findOne(req: Request, res: Response) {
     const competition = await em.findOneOrFail(
       Competition,
       { id },
-      { populate: ['game', 'region', /*'userCreator',*/ 'registrations'] }
+      { populate: ['game', 'region', 'userCreator', 'registrations'] }
     )
     res
       .status(200)
