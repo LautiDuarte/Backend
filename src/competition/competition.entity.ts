@@ -42,14 +42,14 @@ export class Competition extends BaseEntity{
 
 
     //revisar como crear la competicion:
-    @ManyToOne(() => User, {
-        nullable: false 
-    })
-    userCreator!: Rel<User>
+//    @ManyToOne(() => User, {
+//        nullable: false 
+//    })
+//    userCreator?: Rel<User>
 
     @OneToMany(() => Inscription, (inscription) => inscription.competition, {
         cascade: [Cascade.ALL],
         nullable: true
     })
-    registrations = new Collection<Inscription>(this)
+    registrations? = new Collection<Inscription>(this)
 }

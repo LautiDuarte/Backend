@@ -42,9 +42,9 @@ export class User extends BaseEntity {
   teams = new Collection<Team>(this);
 
   //revisar como crear la competicion:
-  @OneToMany(() => Competition, (competition) => competition.userCreator, {
-    cascade: [Cascade.ALL],
-    nullable: true,
-  })
-  competitionsCreated = new Collection<Competition>(this);
+//  @OneToMany(() => Competition, (competition) => competition.userCreator, {
+//    cascade: [Cascade.ALL],
+//    nullable: true,
+//  })
+//  competitionsCreated = new Collection<Competition>(this);
 }

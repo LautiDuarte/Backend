@@ -12,7 +12,7 @@ function sanitizecompetitionInput(req: Request, res: Response, next: NextFunctio
     dateEnding: req.body.dateEnding,
     game: req.body.game,
     region: req.body.region,
-    userCreator: req.body.userCreator,
+//    userCreator: req.body.userCreator,
     registrations: req.body.registrations
   }
 
@@ -30,9 +30,9 @@ async function findAll(req: Request, res: Response) {
     const competitions = await em.find(
       Competition, 
       {},
-      { populate: ['game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['game', 'region', /*'userCreator',*/ 'registrations'] }
     )
-    res.status(200).json({ message: 'found all competitions', data: competitions })
+    res.status(200).json(competitions)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -45,11 +45,11 @@ async function findOne(req: Request, res: Response) {
     const competition = await em.findOneOrFail(
       Competition,
       { id },
-      { populate: ['game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['game', 'region', /*'userCreator',*/ 'registrations'] }
     )
     res
       .status(200)
-      .json({ message: 'found competition', data: competition })
+      .json(competition)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -61,7 +61,7 @@ async function add(req: Request, res: Response) {
     await em.flush()
     res
       .status(201)
-      .json({ message: 'competition created', data: competition })
+      .json(competition)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -73,7 +73,7 @@ async function update(req: Request, res: Response) {
     const competition = em.getReference(Competition, id)
     em.assign(competition, req.body.sanitizedInput)
     await em.flush()
-    res.status(200).json({ message: 'competition updated' })
+    res.status(200).json()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -84,7 +84,7 @@ async function remove(req: Request, res: Response) {
     const id = Number.parseInt(req.params.id)
     const competition = em.getReference(Competition, id)
     await em.removeAndFlush(competition)
-    res.status(200).send({ message: 'competition deleted' })
+    res.status(200).send()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

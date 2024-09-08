@@ -14,7 +14,7 @@ function sanitizeuserInput(req: Request, res: Response, next: NextFunction) {
     email: req.body.email,
     //eliminé la contraseña para despues guardarla ya hasheada
     teams: req.body.teams,
-    competitionsCreated: req.body.competitionsCreated,
+//    competitionsCreated: req.body.competitionsCreated,
   };
 
 
@@ -31,7 +31,7 @@ async function findAll(req: Request, res: Response) {
     const users = await em.find(
       User, 
       {},
-      { populate: ['competitionsCreated', 'teams'] }
+      { populate: [/*'competitionsCreated',*/ 'teams'] }
     )
     res.status(200).json(users)
   } catch (error: any) {
@@ -46,7 +46,7 @@ async function findOne(req: Request, res: Response) {
     const user = await em.findOneOrFail(
       User, 
       { id },
-      { populate: ['competitionsCreated', 'teams'] }
+      { populate: [/*'competitionsCreated',*/ 'teams'] }
     )
     res
       .status(200)
@@ -104,7 +104,7 @@ async function loginUser(req: Request, res: Response) {
   }
 
   //generamos token
-  const token = jwt.sign({ userName: userName }, process.env.SECRET_KEY || 'pepito123');
+  const token = jwt.sign({ id:existingUser.id, userName: userName }, process.env.SECRET_KEY || 'pepito123');
   res.json(token);
 }
 
