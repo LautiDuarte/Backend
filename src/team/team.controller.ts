@@ -118,7 +118,7 @@ async function addUserToTeam(req: Request, res: Response) {
 async function removeUserFromTeam(req: Request, res: Response) {
   try{
     const teamId = Number.parseInt(req.params.id);
-    const { userId } = req.body;
+    const userId = Number.parseInt(req.query.userId as string);
 
     if (!userId) {
       return res.status(400).json({ message: 'Se requiere ID de usuario' });
