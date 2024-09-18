@@ -1,11 +1,12 @@
 import { Router } from 'express'
 import { sanitizeinscriptionInput, findAll, findOne, add, update, remove } from './inscription.controller.js'
+import { validateToken } from '../shared/db/validate-token.js';
 
 
 export const inscriptionRouter = Router()
-inscriptionRouter.get('/:id', findOne)
-inscriptionRouter.get('/', findAll)
-inscriptionRouter.post('/', sanitizeinscriptionInput, add)
-inscriptionRouter.put('/:id', sanitizeinscriptionInput, update)
-inscriptionRouter.patch('/:id', sanitizeinscriptionInput, update)
-inscriptionRouter.delete('/:id', remove)
+inscriptionRouter.get('/:id', validateToken, findOne);
+inscriptionRouter.get('/', validateToken, findAll);
+inscriptionRouter.post('/', validateToken, sanitizeinscriptionInput, add);
+inscriptionRouter.put('/:id', validateToken, sanitizeinscriptionInput, update);
+inscriptionRouter.patch('/:id', validateToken, sanitizeinscriptionInput, update)
+inscriptionRouter.delete('/:id', validateToken, remove);

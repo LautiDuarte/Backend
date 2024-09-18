@@ -92,17 +92,17 @@ async function addUserToTeam(req: Request, res: Response) {
     // Encuentro el equipo
     const team = await em.findOneOrFail(Team, teamId, {populate: ['players'] });
 
-    // Verifico si el equipo tiene menos de 5 jugadores
-    if (team.players.length >= 5) {
-      return res.status(400).json({message: 'Un equipo no puede tener más de 5 jugadores'})
-    }
-
     // Encuentro el usuario
     const user = await em.findOneOrFail(User, userId);
 
     // Verifico si el usuario ya está en el equipo
     if (team.players.getItems().some(player => player.id === userId)) {
       return res.status(400).json({ message: 'Ya estás en el equipo' });
+    }
+
+    // Verifico si el equipo tiene menos de 5 jugadores
+    if (team.players.length >= 5) {
+      return res.status(400).json({message: 'Un equipo no puede tener más de 5 jugadores'})
     }
 
     // Añado el usuario al equipo
@@ -147,11 +147,11 @@ async function removeUserFromTeam(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
-    const players = req.body.sanitizedInput.players;
-      if (players.length > 5){
-        return res.status(400).json({message: 'A team cannot have more than 5 players'});
-      }
     const id = Number.parseInt(req.params.id)
+    const {name} = req.body.sanitizedInput
+    if (!name) {
+      return res.status(400).json({ message: 'El nombre del equipo es obligatorio' });
+    }
     const team = em.getReference(Team, id)
     em.assign(team, req.body.sanitizedInput)
     await em.flush()

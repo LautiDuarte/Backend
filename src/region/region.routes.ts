@@ -1,11 +1,12 @@
 import { Router } from "express"
 import { sanitizeregionInput, findAll, findOne, add, update, remove } from "./region.controller.js"
+import { validateToken } from "../shared/db/validate-token.js";
 
 export const regionRouter = Router()
 
-regionRouter.get('/', findAll)
-regionRouter.get('/:id', findOne)
-regionRouter.post('/', sanitizeregionInput, add)
-regionRouter.put('/:id', sanitizeregionInput, update)
-regionRouter.patch('/:id', sanitizeregionInput, update)
-regionRouter.delete('/:id', remove)
+regionRouter.get('/', validateToken, findAll);
+regionRouter.get('/:id', validateToken, findOne);
+regionRouter.post('/', validateToken, sanitizeregionInput, add);
+regionRouter.put('/:id', validateToken, sanitizeregionInput, update);
+regionRouter.patch('/:id', validateToken, sanitizeregionInput, update);
+regionRouter.delete('/:id', validateToken, remove);

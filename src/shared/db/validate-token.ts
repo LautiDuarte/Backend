@@ -18,5 +18,3 @@ const validateToken = (req:Request, res:Response, next: NextFunction) => {
   }
 }
 export {validateToken}
-
-//este validateToken se pondría en todos los accesos que quiera restringir, por ejemplo mirar las routes de gameType
