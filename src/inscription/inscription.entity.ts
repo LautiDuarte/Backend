@@ -6,7 +6,7 @@ import { Team } from '../team/team.entity.js'
 @Entity()
 export class Inscription extends BaseEntity{
     @Property({
-        type: DateTimeType,
+        type: Date,
         nullable: false
     })
     date!: Date

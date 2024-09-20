@@ -1,6 +1,7 @@
 import { Inscription } from './inscription.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
+import { Team } from '../team/team.entity.js'
 
 const em = orm.em
 
@@ -29,7 +30,7 @@ async function findAll(req: Request, res: Response) {
       {},
       { populate: ['competition', 'team'] }
     )
-    res.status(200).json({ message: 'found all inscriptions', data: inscriptions })
+    res.status(200).json(inscriptions)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -46,23 +47,49 @@ async function findOne(req: Request, res: Response) {
     )
     res
       .status(200)
-      .json({ message: 'found inscription', data: inscription })
+      .json(inscription)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-async function add(req: Request, res: Response) {
+async function add(req: Request, res: Response){
+  try{
+    const { competition, team } = req.body.sanitizedInput;
+    console.log(req.body);
+
+    // Verifico si el equipo tiene suficientes jugadores
+    const teamEntity = await em.findOneOrFail(Team, team, { populate: ['players'] });
+    if (teamEntity.players.length < 5){
+      return res.status(400).json({ message: 'El equipo no tiene suficientes jugadores para participar en la competición.' });
+    }
+
+    // Verifico si el equipo ya está inscrito en la competición
+    const existingInscription = await em.findOne(Inscription, { competition, team });
+    if (existingInscription) {
+      return res.status(400).json({message: 'El equipo ya está inscrito en esta competición.'})
+    }
+
+    // Crear la competition
+    const inscription = em.create(Inscription, req.body.sanitizedInput);
+    await em.flush();
+    res.status(201).json(inscription)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+/*async function add(req: Request, res: Response) {
   try {
     const inscription = em.create(Inscription, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
-      .json({ message: 'inscription created', data: inscription })
+      .json(inscription)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
-}
+}*/
 
 async function update(req: Request, res: Response) {
   try {
@@ -70,7 +97,7 @@ async function update(req: Request, res: Response) {
     const inscription = em.getReference(Inscription, id)
     em.assign(inscription, req.body.sanitizedInput)
     await em.flush()
-    res.status(200).json({ message: 'inscription updated' })
+    res.status(200).json()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -81,7 +108,7 @@ async function remove(req: Request, res: Response) {
     const id = Number.parseInt(req.params.id)
     const inscription = em.getReference(Inscription, id)
     await em.removeAndFlush(inscription)
-    res.status(200).send({ message: 'inscription deleted' })
+    res.status(200).send()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
