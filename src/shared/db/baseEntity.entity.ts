@@ -6,12 +6,15 @@ export abstract class BaseEntity {
 
   /*
 
-  @Property({ type: DateTimeType })
+  @Property({ 
+    type: DateTimeType 
+    onCreate: () => new Date()
+    })
   createdAt? = new Date()
 
   @Property({
     type: DateTimeType,
-    onUpdate: () => new Date(),
+    onUpdate: () => new Date()
   })
   updatedAt? = new Date()
 

@@ -15,6 +15,11 @@ export class Game extends BaseEntity{
         nullable:false
     })
     description!: string
+
+    @Property({
+        nullable:false
+    })
+    imageUrl!: string
     
     @ManyToOne(() => GameType, { 
         nullable: false 
