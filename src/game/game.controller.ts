@@ -10,6 +10,7 @@ function sanitizegameInput(req: Request, res: Response, next: NextFunction) {
     description: req.body.description,
     gameType: req.body.gameType,
     competitions: req.body.competitions,
+    imageUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
   };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -19,6 +20,7 @@ function sanitizegameInput(req: Request, res: Response, next: NextFunction) {
   });
   next();
 }
+
 
 async function findAll(req: Request, res: Response) {
   try {

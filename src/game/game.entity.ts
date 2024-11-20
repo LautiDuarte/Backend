@@ -17,7 +17,7 @@ export class Game extends BaseEntity{
     description!: string
 
     @Property({
-        nullable:false
+        nullable:true
     })
     imageUrl!: string
     
