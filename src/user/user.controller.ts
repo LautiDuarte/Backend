@@ -13,7 +13,7 @@ function sanitizeuserInput(req: Request, res: Response, next: NextFunction) {
     userName: req.body.userName,
     email: req.body.email,
     teams: req.body.teams,
-//  competitionsCreated: req.body.competitionsCreated,
+    competitionsCreated: req.body.competitionsCreated,
     iconUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
   };
 
@@ -46,7 +46,7 @@ async function findOne(req: Request, res: Response) {
     const user = await em.findOneOrFail(
       User, 
       { id },
-      { populate: [/*'competitionsCreated',*/ 'teams'] }
+      { populate: ['competitionsCreated', 'teams'] }
     )
     res
       .status(200)
@@ -59,24 +59,18 @@ async function findOne(req: Request, res: Response) {
 async function newUser(req:Request, res:Response) {
   try{
     const { userName, email } = req.body;
-
-    //validamos si el usuario ya existe en la base de datos
     const existingUser = await em.findOne(User, { userName });
     if (existingUser) {
       return res
         .status(500)
         .json({ message: `El nombre de usuario ${userName} ya está en uso.` });
     }
-
-    //validamos si el email ya existe en la base de datos
     const existingEmail = await em.findOne(User, { email });
     if (existingEmail) {
       return res
         .status(500)
         .json({ message: `El email ${email} ya está registrado.` });
     }
-
-    // Si no existe, procedemos con la creación del usuario
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = em.create(User, {
       ...req.body.sanitizedInput,
@@ -91,19 +85,14 @@ async function newUser(req:Request, res:Response) {
 
 async function loginUser(req: Request, res: Response) {
   const { userName, password } = req.body;
-  //validamos si el usuario ya existe en la base de datos
   const existingUser: any = await em.findOne(User, { userName });
   if (!existingUser) {
     return res.status(500).json({ message: `No existe un usuario con el userName ${userName}` });
   }
-
-  //validamos password
   const passwordValid = await bcrypt.compare(password, existingUser.password);
   if (!passwordValid){
     return res.status(500).json({ message: `Password Incorrecta` });
   }
-
-  //generamos token
   const token = jwt.sign({ id:existingUser.id, userName: userName }, process.env.SECRET_KEY || 'pepito123');
   res.json(token);
 }

@@ -11,6 +11,12 @@ export class Team extends BaseEntity{
     })
     name!: string
 
+    @Property({
+        nullable: false,
+        default: 0
+    })
+    points!: number
+
     @ManyToMany(() => User, (user) => user.teams)
     players = new Collection<User>(this)
 
