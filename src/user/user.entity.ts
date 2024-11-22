@@ -28,6 +28,9 @@ export class User extends BaseEntity {
   @Property({ nullable: false })
   password!: string;
 
+  @Property({ nullable: true })
+  iconUrl!: string;
+
   @Property({ type: DateTimeType })
   createdAt? = new Date();
 

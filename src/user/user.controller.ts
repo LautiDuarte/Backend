@@ -12,9 +12,9 @@ function sanitizeuserInput(req: Request, res: Response, next: NextFunction) {
     lastName: req.body.lastName,
     userName: req.body.userName,
     email: req.body.email,
-    //eliminé la contraseña para despues guardarla ya hasheada
     teams: req.body.teams,
-//    competitionsCreated: req.body.competitionsCreated,
+//  competitionsCreated: req.body.competitionsCreated,
+    iconUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
   };
 
 
