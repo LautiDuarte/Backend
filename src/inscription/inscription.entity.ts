@@ -18,12 +18,14 @@ export class Inscription extends BaseEntity{
     status!: string
 
     @ManyToOne(() => Competition, { 
-        nullable: false 
+        nullable: false,
+        deleteRule: 'cascade'
     })
     competition!: Rel<Competition>
 
     @ManyToOne(() => Team, { 
-        nullable: false 
+        nullable: false,
+        deleteRule: 'cascade'
     })
     team!: Rel<Team>
 }

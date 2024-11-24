@@ -23,7 +23,7 @@ export class Team extends BaseEntity{
 
     @OneToMany(() => Inscription, (inscription) => inscription.team, {
         cascade: [Cascade.ALL],
-        nullable: true
+        nullable: true,
     })
     registrations = new Collection<Inscription>(this)
 }
