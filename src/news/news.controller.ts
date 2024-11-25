@@ -9,6 +9,7 @@ function sanitizenewsInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     title: req.body.title,
     body: req.body.body,
+    imageUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
   }
 
 

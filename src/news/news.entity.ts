@@ -1,5 +1,6 @@
-import { Entity, Property } from '@mikro-orm/core'
+import { DateTimeType, Entity, Property } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { Timestamp } from 'mongodb'
 
 @Entity()
 export class News extends BaseEntity{
@@ -10,5 +11,8 @@ export class News extends BaseEntity{
   body!: string
 
   @Property({nullable:true})
-  image!: string
+  imageUrl!: string
+
+  @Property({ type: DateTimeType, onCreate: () => new Date() })
+  date? = new Date()
 }
