@@ -7,8 +7,8 @@ const em = orm.em
 function sanitizeregionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
-    description: req.body.description,
-    competitions: req.body.competitions
+    competitions: req.body.competitions,
+    imageUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
   }
 
 

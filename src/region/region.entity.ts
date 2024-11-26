@@ -6,9 +6,9 @@ import { Entity, Property, Cascade, OneToMany, Collection } from '@mikro-orm/cor
 export class Region extends BaseEntity{
     @Property({nullable:false, unique:true})	
     name!: string
-    
-    @Property({nullable:false})	
-    description!: string
+
+    @Property({nullable:true})
+    imageUrl!: string
 
     @OneToMany(() => Competition, (competition) => competition.region, {
         cascade: [Cascade.ALL],
