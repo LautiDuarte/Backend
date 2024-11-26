@@ -61,13 +61,13 @@ async function add(req: Request, res: Response){
     // Verifico si el equipo tiene suficientes jugadores
     const teamEntity = await em.findOneOrFail(Team, team, { populate: ['players'] });
     if (teamEntity.players.length < 5){
-      return res.status(400).json({ message: 'El equipo no tiene suficientes jugadores para participar en la competición.' });
+      return res.status(400).json({ message: 'Team has not enough members. (Min. 5 players).' });
     }
 
     // Verifico si el equipo ya está inscrito en la competición
     const existingInscription = await em.findOne(Inscription, { competition, team });
     if (existingInscription) {
-      return res.status(400).json({message: 'El equipo ya está inscrito en esta competición.'})
+      return res.status(400).json({message: 'The team is already registered in this competition.'})
     }
 
     // Crear la competition

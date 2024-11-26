@@ -7,7 +7,6 @@ const em = orm.em
 function sanitizecompetitionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
-    type: req.body.type,
     dateStart: req.body.dateStart,
     dateEnding: req.body.dateEnding,
     game: req.body.game,

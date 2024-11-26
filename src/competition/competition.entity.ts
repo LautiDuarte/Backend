@@ -14,12 +14,6 @@ export class Competition extends BaseEntity{
     name!: string
 
     @Property({
-        nullable:false
-    })
-    type!: string
-
-
-    @Property({
         type: DateTimeType,
         nullable:false
     })
