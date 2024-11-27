@@ -22,7 +22,7 @@ export class Competition extends BaseEntity{
     @Property({
         type: DateTimeType,
         nullable:false})
-    dateEnding!: Date
+    dateInscriptionLimit!: Date
 
     @ManyToOne(() => Game, {
         nullable: false 

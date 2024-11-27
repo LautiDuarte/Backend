@@ -58,19 +58,16 @@ async function add(req: Request, res: Response){
     const { competition, team } = req.body.sanitizedInput;
     console.log(req.body);
 
-    // Verifico si el equipo tiene suficientes jugadores
     const teamEntity = await em.findOneOrFail(Team, team, { populate: ['players'] });
     if (teamEntity.players.length < 5){
       return res.status(400).json({ message: 'Team has not enough members. (Min. 5 players).' });
     }
 
-    // Verifico si el equipo ya está inscrito en la competición
     const existingInscription = await em.findOne(Inscription, { competition, team });
     if (existingInscription) {
       return res.status(400).json({message: 'The team is already registered in this competition.'})
     }
 
-    // Crear la competition
     const inscription = em.create(Inscription, req.body.sanitizedInput);
     await em.flush();
     res.status(201).json(inscription)

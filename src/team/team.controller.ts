@@ -59,7 +59,7 @@ async function add(req: Request, res: Response) {
     //valido si el nombre del team ya existe en la base de datos
     const existingTeam = await em.findOne(Team, { name });
     if (existingTeam) {
-      return res.status(500).json({ message: `El nombre del equipo ${name} ya está en uso.` });
+      return res.status(500).json({ message: `The team's name ${name} is already being used.` });
     }
 
     //creo al nuevo equipo
@@ -68,7 +68,7 @@ async function add(req: Request, res: Response) {
     //busco al usuario que esta creando el equipo
     const user = await em.findOne(User, { id: userCreator });
     if (!user) {
-      return res.status(404).json({message: 'Usuario no encontrado'});
+      return res.status(404).json({message: 'User not found'});
     }
 
     //agrego al usuario creador al equipo
@@ -87,7 +87,7 @@ async function addUserToTeam(req: Request, res: Response) {
     const { userId } = req.body;
 
     if (!userId) {
-      return res.status(400).json({ message: 'Se requiere ID de usuario' });
+      return res.status(400).json({ message: 'User ID is required' });
     }
 
     // Encuentro el equipo
@@ -98,19 +98,19 @@ async function addUserToTeam(req: Request, res: Response) {
 
     // Verifico si el usuario ya está en el equipo
     if (team.players.getItems().some(player => player.id === userId)) {
-      return res.status(400).json({ message: 'Ya estás en el equipo' });
+      return res.status(400).json({ message: 'You are in the team already.' });
     }
 
     // Verifico si el equipo tiene menos de 5 jugadores
     if (team.players.length >= 5) {
-      return res.status(400).json({message: 'Un equipo no puede tener más de 5 jugadores'})
+      return res.status(400).json({message: 'A team must have at least 5 players'})
     }
 
     // Añado el usuario al equipo
     team.players.add(user);
     await em.flush();
 
-    res.status(200).json({message: 'Usuario añadido'})
+    res.status(200).json({message: 'User added'})
   } catch (error: any) {
     res.status(500).json({message: error.message})
   }
@@ -122,7 +122,7 @@ async function removeUserFromTeam(req: Request, res: Response) {
     const userId = Number.parseInt(req.query.userId as string);
 
     if (!userId) {
-      return res.status(400).json({ message: 'Se requiere ID de usuario' });
+      return res.status(400).json({ message: 'User ID required' });
     }
 
     // Encuentro el equipo
@@ -133,14 +133,14 @@ async function removeUserFromTeam(req: Request, res: Response) {
 
     // Verifico si el usuario ya está en el equipo
     if (!team.players.getItems().some(player => player.id === userId)) {
-      return res.status(400).json({ message: 'No estás en el equipo' });
+      return res.status(400).json({ message: 'Your are not in the team' });
     }
 
     // Elimino el usuario del equipo
     team.players.remove(user);
     await em.flush();
 
-    res.status(200).json({message: 'Usuario removido'})
+    res.status(200).json({message: 'User removed'})
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -151,7 +151,7 @@ async function update(req: Request, res: Response) {
     const id = Number.parseInt(req.params.id)
     const {name} = req.body.sanitizedInput
     if (!name) {
-      return res.status(400).json({ message: 'El nombre del equipo es obligatorio' });
+      return res.status(400).json({ message: 'Team\'s name is required' });
     }
     const team = em.getReference(Team, id)
     em.assign(team, req.body.sanitizedInput)

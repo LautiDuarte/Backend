@@ -8,7 +8,7 @@ function sanitizecompetitionInput(req: Request, res: Response, next: NextFunctio
   req.body.sanitizedInput = {
     name: req.body.name,
     dateStart: req.body.dateStart,
-    dateEnding: req.body.dateEnding,
+    dateInscriptionLimit: req.body.dateInscriptionLimit,
     game: req.body.game,
     region: req.body.region,
     userCreator: req.body.userCreator,
