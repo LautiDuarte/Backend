@@ -1,20 +1,15 @@
-import { Competition } from './competition.entity.js'
-import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
+import { Request, Response, NextFunction } from 'express'
+import { Match } from './match.entity.js'
 
 const em = orm.em
 
-function sanitizecompetitionInput(req: Request, res: Response, next: NextFunction) {
+function sanitizeMatchInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    name: req.body.name,
-    dateStart: req.body.dateStart,
-    dateEnd: req.body.dateEnd,
-    winner: req.body.winner,
-    dateInscriptionLimit: req.body.dateInscriptionLimit,
-    game: req.body.game,
-    region: req.body.region,
-    userCreator: req.body.userCreator,
-    registrations: req.body.registrations
+    matchDate: req.body.matchDate,
+    competition: req.body.competition,
+    round: req.body.round,
+    teams: req.body.teams
   }
 
 
@@ -28,29 +23,28 @@ function sanitizecompetitionInput(req: Request, res: Response, next: NextFunctio
 
 async function findAll(req: Request, res: Response) {
   try {
-    const competitions = await em.find(
-      Competition, 
+    const matches = await em.find(
+      Match, 
       {},
-      { populate: ['game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['round', 'competition', 'teams'] }
     )
-    res.status(200).json(competitions)
+    res.status(200).json(matches)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const competition = await em.findOneOrFail(
-      Competition,
+    const match = await em.findOneOrFail(
+      Match, 
       { id },
-      { populate: ['game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['round', 'competition', 'teams']}
     )
     res
       .status(200)
-      .json(competition)
+      .json(match)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -58,11 +52,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const competition = em.create(Competition, req.body.sanitizedInput)
+    const match = em.create(Match, req.body.sanitizedInput)
     await em.flush()
     res
       .status(201)
-      .json(competition)
+      .json(match)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -71,8 +65,8 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const competition = em.getReference(Competition, id)
-    em.assign(competition, req.body.sanitizedInput)
+    const match = em.getReference(Match, id)
+    em.assign(match, req.body.sanitizedInput)
     await em.flush()
     res.status(200).json()
   } catch (error: any) {
@@ -83,12 +77,12 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const competition = em.getReference(Competition, id)
-    await em.removeAndFlush(competition)
+    const match = em.getReference(Match, id)
+    await em.removeAndFlush(match)
     res.status(200).send()
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizecompetitionInput, findAll, findOne, add, update, remove }
+export { sanitizeMatchInput, findAll, findOne, add, update, remove }

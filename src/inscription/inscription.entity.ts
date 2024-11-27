@@ -11,12 +11,6 @@ export class Inscription extends BaseEntity{
     })
     date!: Date
 
-    @Property({ 
-        nullable: true,
-        default: 0
-    })
-    score!: number
-
     @Property({ nullable: false})
     status!: string
 

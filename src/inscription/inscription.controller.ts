@@ -2,13 +2,13 @@ import { Inscription } from './inscription.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
 import { Team } from '../team/team.entity.js'
+import { Competition } from '../competition/competition.entity.js'
 
 const em = orm.em
 
 function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     date: req.body.date,
-    score: req.body.score,
     status: req.body.status,
     competition: req.body.competition,
     team: req.body.team
@@ -55,8 +55,15 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response){
   try{
-    const { competition, team } = req.body.sanitizedInput;
+    const { competition, team, date } = req.body.sanitizedInput;
     console.log(req.body);
+
+    const foundCompetition = await em.findOneOrFail(Competition, { id: competition });
+    if (new Date(date) > new Date(foundCompetition.dateInscriptionLimit)) {
+      return res.status(400).json({ 
+        message: 'The inscription date exceeds the competition’s date limit.' 
+      });
+    }
 
     const teamEntity = await em.findOneOrFail(Team, team, { populate: ['players'] });
     if (teamEntity.players.length < 5){

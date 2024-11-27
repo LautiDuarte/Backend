@@ -4,25 +4,37 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Cascade, Collection, DateTimeType, Entity, ManyToMany, ManyToOne, OneToMany, Property, Rel } from '@mikro-orm/core'
 import { User } from '../user/user.entity.js'
 import { Inscription } from '../inscription/inscription.entity.js'
+import { Team } from '../team/team.entity.js'
+import { Round } from '../round/round.entity.js' 
 
 @Entity()
 export class Competition extends BaseEntity{
     @Property({
-        nullable:false, 
-        unique:true
+        nullable:false
     })
     name!: string
 
     @Property({
         type: DateTimeType,
-        nullable:false
+        nullable:true
     })
     dateStart!: Date
 
     @Property({
         type: DateTimeType,
+        nullable:true
+    })
+    dateEnd!: Date
+
+    @Property({
+        type: DateTimeType,
         nullable:false})
     dateInscriptionLimit!: Date
+
+    @ManyToOne(() => Team, {
+        nullable: true 
+    })
+    winner!: Rel<Team>
 
     @ManyToOne(() => Game, {
         nullable: false 
