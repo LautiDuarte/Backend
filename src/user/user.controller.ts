@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
+import { sendEmail } from '../services/emailService.js';
 
 const em = orm.em
 
@@ -77,6 +78,14 @@ async function newUser(req:Request, res:Response) {
       password: hashedPassword,
     });
     await em.flush();
+
+    //email bienvenida
+    await sendEmail(
+      email,
+      'Bienvenido a la plataforma de E-Sports',
+      `Hola ${userName}, bienvenido a la plataforma de E-Sports. Estamos encantados de tenerte con nosotros.`
+    );
+
     res.status(201).json(user);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
