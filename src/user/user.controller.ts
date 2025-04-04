@@ -4,6 +4,7 @@ import { orm } from '../shared/db/orm.js'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import { sendEmail } from '../services/emailService.js';
+import crypto from 'crypto';
 
 const em = orm.em
 
@@ -106,6 +107,59 @@ async function loginUser(req: Request, res: Response) {
   res.json(token);
 }
 
+async function forgotPassword(req: Request, res: Response) {
+  try {
+    const { email } = req.body;
+    const user = await em.findOne(User, { email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'No existe un usuario con ese email' });
+    }
+
+    // generamos token de recuperacion
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 3600000); // 1 hora
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = expiresAt;
+    await em.flush();
+    
+    // enviar email con el token
+    const resetUrl = `http://localhost:4200/reset-password?token=${token}`;
+    await sendEmail(
+      email,
+      'Recuperación de contraseña',
+      `Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para continuar: ${resetUrl}`
+    );
+
+    res.status(200).json({ message: 'Email de recuperación enviado' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function resetPassword(req: Request, res: Response) {
+  try {
+    const { token, newPassword } = req.body;
+    // Buscar el usuario con el token y que la fecha de expiración no haya pasado
+    const user = await em.findOne(User, { resetPasswordToken: token, resetPasswordExpires: { $gt: new Date() } });
+
+    if (!user) {
+      return res.status(400).json({ message: 'El token es inválido o ha expirado' });
+    }
+
+    //guardar nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;  // Limpiamos el token
+    user.resetPasswordExpires = undefined;  // Limpiamos la fecha de expiración del token
+    await em.flush();
+
+    res.status(200).json({ message: 'Contraseña actualizada con éxito' });
+  } catch (error: any) { 
+    res.status(500).json({ message: error.message });
+  } 
+ }
+
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
@@ -137,4 +191,6 @@ export {
   loginUser,
   update,
   remove,
+  forgotPassword,
+  resetPassword
 };

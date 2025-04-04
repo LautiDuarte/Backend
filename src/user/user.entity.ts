@@ -29,6 +29,12 @@ export class User extends BaseEntity {
   password!: string;
 
   @Property({ nullable: true })
+  resetPasswordToken?: string;
+
+  @Property({ nullable: true })
+  resetPasswordExpires?: Date;
+
+  @Property({ nullable: true })
   iconUrl!: string;
 
   @Property({ type: DateTimeType })
