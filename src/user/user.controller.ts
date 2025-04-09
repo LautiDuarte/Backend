@@ -17,6 +17,7 @@ function sanitizeuserInput(req: Request, res: Response, next: NextFunction) {
     teams: req.body.teams,
     competitionsCreated: req.body.competitionsCreated,
     iconUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
+    role: req.body.role
   };
 
 
@@ -103,7 +104,7 @@ async function loginUser(req: Request, res: Response) {
   if (!passwordValid){
     return res.status(500).json({ message: `Password Incorrecta` });
   }
-  const token = jwt.sign({ id:existingUser.id, userName: userName }, process.env.SECRET_KEY || 'pepito123');
+  const token = jwt.sign({ id:existingUser.id, userName: userName, role: existingUser.role}, process.env.SECRET_KEY || 'pepito123');
   res.json(token);
 }
 
@@ -163,6 +164,15 @@ async function resetPassword(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
+    const { userName, email } = req.body.sanitizedInput;
+    const existingUsername = await em.findOne(User, { userName });
+    if (existingUsername && existingUsername.id !== id) {
+    return res.status(400).json({ message: 'Username already exists' });
+    }
+    const existingEmail = await em.findOne(User, { email });
+    if (existingEmail && existingEmail.id !== id) {
+    return res.status(400).json({ message: 'Email already exists' });
+    }
     const user = em.getReference(User, id)
     em.assign(user, req.body.sanitizedInput)
     await em.flush()

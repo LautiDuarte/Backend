@@ -1,20 +1,35 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken'
 
-const validateToken = (req:Request, res:Response, next: NextFunction) => {
+interface JwtPayload{
+  id: number;
+  name: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  iconUrl?: string;
+  competitionsCreated?: number[];
+  teams?: number[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  role: 'user' | 'admin';
+}
+
+export const validateToken = (req: Request & { user?: JwtPayload }, res: Response, next: NextFunction) => {
   const headerToken = req.headers['authorization'];
 
-  if(headerToken != undefined && headerToken.startsWith('Bearer')) {
-    //tiene toker
-    try{
-      const bearerToken = headerToken.slice(7); //recorto la palabra bearer que viene
-      jwt.verify(bearerToken, process.env.SECRET_KEY || 'pepito123');
-      next()
+  if (headerToken !== undefined && headerToken.startsWith('Bearer')) {
+    try {
+      const bearerToken = headerToken.slice(7); 
+      const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY || 'pepito123') as JwtPayload;
+
+      req.user = decoded; 
+      next();
     } catch (error) {
-      res.status(401).json({message: 'Token no valido'})
+      res.status(401).json({ message: 'Invalid token' });
     }
-  } else{
-    res.status(401).json({message: 'Acceso denegado'})
+  } else {
+    res.status(401).json({ message: 'Access denied' });
   }
-}
-export {validateToken}
+};

@@ -10,6 +10,12 @@ import {
 } from '@mikro-orm/core';
 import { Team } from '../team/team.entity.js';
 import { Competition } from '../competition/competition.entity.js';
+import { Enum } from '@mikro-orm/core';
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
 
 @Entity()
 export class User extends BaseEntity {
@@ -56,4 +62,7 @@ export class User extends BaseEntity {
     nullable: true,
   })
   competitionsCreated = new Collection<Competition>(this);
+
+  @Enum({ items: () => UserRole, default: UserRole.USER })
+  role: UserRole = UserRole.USER;
 }
