@@ -5,6 +5,14 @@ import { User } from '../user/user.entity.js'
 
 const em = orm.em
 
+interface TeamRequest extends Request {
+  user?: {
+    id: number
+    name: string
+    role: 'user' | 'admin'
+  }
+}
+
 function sanitizeteamInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
@@ -97,7 +105,7 @@ async function addUserToTeam(req: Request, res: Response) {
     }
 
     if (team.players.length >= 5) {
-      return res.status(400).json({message: 'A team must have at least 5 players'})
+      return res.status(400).json({message: 'A team can have a maximum of 5 players.'});
     }
 
     team.players.add(user);
@@ -135,31 +143,39 @@ async function removeUserFromTeam(req: Request, res: Response) {
   }
 }
 
-async function update(req: Request, res: Response) {
+async function update(req: TeamRequest, res: Response) {
   try {
-    const id = Number.parseInt(req.params.id)
-    const {name} = req.body.sanitizedInput
-    if (!name) {
-      return res.status(400).json({ message: 'Team\'s name is required' });
+      const id = Number.parseInt(req.params.id)
+  
+      const team = await em.findOneOrFail(Team, { id }, { populate: ['userCreator'] })
+  
+      if (team.userCreator?.id !== req.user?.id && req.user?.role !== 'admin') {
+        return res.status(403).json({ message: 'You are not authorized to update this team' })
+      }
+  
+      em.assign(team, req.body.sanitizedInput)
+      await em.flush()
+      res.status(200).json()
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
     }
-    const team = em.getReference(Team, id)
-    em.assign(team, req.body.sanitizedInput)
-    await em.flush()
-    res.status(200).json()
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
 }
 
-async function remove(req: Request, res: Response) {
+async function remove(req: TeamRequest, res: Response) {
   try {
-    const id = Number.parseInt(req.params.id)
-    const team = em.getReference(Team, id)
-    await em.removeAndFlush(team)
-    res.status(200).send()
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
+      const id = Number.parseInt(req.params.id)
+  
+      const team = await em.findOneOrFail(Team, { id }, { populate: ['userCreator'] })
+  
+      if (team.userCreator?.id !== req.user?.id && req.user?.role !== 'admin') {
+        return res.status(403).json({ message: 'You are not authorized to delete this team' })
+      }
+  
+      await em.removeAndFlush(team)
+      res.status(200).send()
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
+    }
 }
 
 export { sanitizeteamInput, findAll, findOne, add, update, remove, addUserToTeam, removeUserFromTeam }
