@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { sanitizecompetitionInput, findAll, findOne, add, update, remove } from './competition.controller.js'
-import { validateToken } from '../shared/db/validate-token.js';
+import { validateToken } from '../shared/validate-token.js';
 
 
 export const competitionRouter = Router()

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { sanitizeMatchInput, findAll, findOne, add, update, remove } from './match.controller.js'
-import { validateToken } from '../shared/db/validate-token.js';
+import { validateToken } from '../shared/validate-token.js';
 
 export const matchRouter = Router()
 matchRouter.get('/:id', validateToken, findOne);

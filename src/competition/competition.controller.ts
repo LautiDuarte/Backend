@@ -4,6 +4,14 @@ import { orm } from '../shared/db/orm.js'
 
 const em = orm.em
 
+interface CompetitionRequest extends Request {
+  user?: {
+    id: number
+    name: string
+    role: 'user' | 'admin'
+  }
+}
+
 function sanitizecompetitionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
@@ -68,10 +76,16 @@ async function add(req: Request, res: Response) {
   }
 }
 
-async function update(req: Request, res: Response) {
+async function update(req: CompetitionRequest, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const competition = em.getReference(Competition, id)
+
+    const competition = await em.findOneOrFail(Competition, { id }, { populate: ['userCreator'] })
+
+    if (competition.userCreator?.id !== req.user?.id && req.user?.role !== 'admin') {
+      return res.status(403).json({ message: 'You are not authorized to update this competition' })
+    }
+
     em.assign(competition, req.body.sanitizedInput)
     await em.flush()
     res.status(200).json()
@@ -80,10 +94,16 @@ async function update(req: Request, res: Response) {
   }
 }
 
-async function remove(req: Request, res: Response) {
+async function remove(req: CompetitionRequest, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const competition = em.getReference(Competition, id)
+
+    const competition = await em.findOneOrFail(Competition, { id }, { populate: ['userCreator'] })
+
+    if (competition.userCreator?.id !== req.user?.id && req.user?.role !== 'admin') {
+      return res.status(403).json({ message: 'You are not authorized to delete this competition' })
+    }
+
     await em.removeAndFlush(competition)
     res.status(200).send()
   } catch (error: any) {

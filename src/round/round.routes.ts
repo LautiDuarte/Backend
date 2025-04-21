@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { sanitizeRoundInput, findAll, findOne, add, update, remove } from './round.controller.js'
-import { validateToken } from '../shared/db/validate-token.js';
+import { validateToken } from '../shared/validate-token.js';
 
 export const roundRouter = Router()
 roundRouter.get('/:id', validateToken, findOne);

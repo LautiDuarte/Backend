@@ -9,6 +9,7 @@ function sanitizeteamInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
     points: req.body.points,
+    userCreator: req.body.userCreator,
     players: req.body.players,
     registrations: req.body.registrations,
     matches: req.body.matches
@@ -28,7 +29,7 @@ async function findAll(req: Request, res: Response) {
     const teams = await em.find(
       Team, 
       {},
-      { populate: ['players', 'registrations', 'matches'] }
+      { populate: ['players', 'userCreator', 'registrations', 'matches'] }
     )
     res.status(200).json(teams)
   } catch (error: any) {
@@ -43,7 +44,7 @@ async function findOne(req: Request, res: Response) {
     const team = await em.findOneOrFail(
       Team, 
       { id },
-      { populate: ['players', 'registrations', 'matches'] }
+      { populate: ['players', 'userCreator', 'registrations', 'matches'] }
     )
     res
       .status(200)

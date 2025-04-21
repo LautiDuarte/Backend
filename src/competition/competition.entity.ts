@@ -1,7 +1,7 @@
 import { Game } from '../game/game.entity.js'
 import { Region } from '../region/region.entity.js'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Cascade, Collection, DateTimeType, Entity, ManyToMany, ManyToOne, OneToMany, Property, Rel } from '@mikro-orm/core'
+import { Cascade, Collection, DateTimeType, Entity, ManyToOne, OneToMany, Property, Rel } from '@mikro-orm/core'
 import { User } from '../user/user.entity.js'
 import { Inscription } from '../inscription/inscription.entity.js'
 import { Team } from '../team/team.entity.js'

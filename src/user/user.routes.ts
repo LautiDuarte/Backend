@@ -10,7 +10,7 @@ import {
   forgotPassword,
   resetPassword,
 } from './user.controller.js';
-import { validateToken } from '../shared/db/validate-token.js';
+import { validateToken } from '../shared/validate-token.js';
 
 export const userRouter = Router();
 userRouter.get('/:id', validateToken, findOne);

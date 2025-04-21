@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { sanitizeteamInput, findAll, findOne, add, update, remove, addUserToTeam, removeUserFromTeam } from './team.controller.js'
-import { validateToken } from '../shared/db/validate-token.js';
+import { validateToken } from '../shared/validate-token.js';
 
 
 export const teamRouter = Router()

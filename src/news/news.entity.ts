@@ -14,5 +14,5 @@ export class News extends BaseEntity{
   imageUrl!: string
 
   @Property({ type: DateTimeType, onCreate: () => new Date() })
-  date? = new Date()
+  date = new Date()
 }

@@ -1,5 +1,5 @@
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import { Cascade, Collection, Entity, ManyToMany, OneToMany, Property } from '@mikro-orm/core'
+import { Cascade, Collection, Entity, ManyToMany, OneToMany, ManyToOne, Property, Rel } from '@mikro-orm/core'
 import { User } from '../user/user.entity.js'
 import { Inscription } from '../inscription/inscription.entity.js'
 import { Match } from '../match/match.entity.js'
@@ -18,13 +18,18 @@ export class Team extends BaseEntity{
     })
     points!: number
 
+    @ManyToOne(() => User, {
+        nullable: false 
+    })
+    userCreator?: Rel<User>
+
     @ManyToMany(() => User, (user) => user.teams)
     players = new Collection<User>(this)
 
     @ManyToMany(() => Match, (match) => match.teams, {
-    cascade: [Cascade.ALL],
-    owner: true,
-    nullable: true,
+        cascade: [Cascade.ALL],
+        owner: true,
+        nullable: true,
     })
     matches = new Collection<Team>(this);
 

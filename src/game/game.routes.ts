@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { sanitizegameInput, findAll, findOne, add, update, remove } from './game.controller.js'
-import { validateToken } from '../shared/db/validate-token.js';
-import { checkAdmin } from '../middlewares/role.middleware.js';
+import { validateToken } from '../shared/validate-token.js';
+import { checkAdmin } from '../shared/validate-role.js';
 
 export const gameRouter = Router()
 
