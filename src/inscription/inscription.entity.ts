@@ -15,6 +15,12 @@ export class Inscription extends BaseEntity{
     @Property({ nullable: false})
     status!: string
 
+    @Property({ nullable: false,
+        type: 'integer',
+        default: 0
+    })
+    points!: number
+
     @ManyToOne(() => Competition, { 
         nullable: false,
         deleteRule: 'cascade'

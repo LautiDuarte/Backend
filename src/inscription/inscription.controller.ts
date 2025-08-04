@@ -10,6 +10,7 @@ function sanitizeinscriptionInput(req: Request, res: Response, next: NextFunctio
   req.body.sanitizedInput = {
     date: req.body.date,
     status: req.body.status,
+    points: req.body.points,
     competition: req.body.competition,
     team: req.body.team
   }
@@ -55,11 +56,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response){
   try{
-    const { competition, team, date } = req.body.sanitizedInput;
+    const { competition, team } = req.body.sanitizedInput;
     console.log(req.body);
 
     const foundCompetition = await em.findOneOrFail(Competition, { id: competition });
-    if (new Date(date) > new Date(foundCompetition.dateInscriptionLimit)) {
+    if (new Date() > new Date(foundCompetition.dateInscriptionLimit)) {
       return res.status(400).json({ 
         message: 'The inscription date exceeds the competition’s date limit.' 
       });

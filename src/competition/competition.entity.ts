@@ -30,6 +30,11 @@ export class Competition extends BaseEntity{
         nullable:false})
     dateInscriptionLimit!: Date
 
+    @Property({
+        nullable: false
+    })
+    maxTeams!: number
+
     @ManyToOne(() => Team, {
         nullable: true 
     })

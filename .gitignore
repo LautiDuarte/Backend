@@ -6,6 +6,7 @@ coverage
 
 # dependency directory
 node_modules
+uploads
 
 # OS metadata
 .DS_Store
@@ -30,3 +31,5 @@ uploads/*
 
 ## built vscode extensions
 *.vsix
+
+pnpm-lock.yaml

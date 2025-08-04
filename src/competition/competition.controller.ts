@@ -19,6 +19,7 @@ function sanitizecompetitionInput(req: Request, res: Response, next: NextFunctio
     dateEnd: req.body.dateEnd,
     winner: req.body.winner,
     dateInscriptionLimit: req.body.dateInscriptionLimit,
+    maxTeams: req.body.maxTeams,
     game: req.body.game,
     region: req.body.region,
     userCreator: req.body.userCreator,
