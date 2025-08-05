@@ -5,6 +5,7 @@ import { Cascade, Collection, DateTimeType, Entity, ManyToOne, OneToMany, Proper
 import { User } from '../user/user.entity.js'
 import { Inscription } from '../inscription/inscription.entity.js'
 import { Team } from '../team/team.entity.js'
+import { Match } from '../match/match.entity.js'
 
 @Entity()
 export class Competition extends BaseEntity{
@@ -54,6 +55,12 @@ export class Competition extends BaseEntity{
         nullable: false 
     })
     userCreator?: Rel<User>
+
+    @OneToMany(() => Match, (match) => match.competition, {
+        cascade: [Cascade.ALL],
+        nullable: true,
+    })
+    matches? = new Collection<Match>(this)
 
     @OneToMany(() => Inscription, (inscription) => inscription.competition, {
         cascade: [Cascade.ALL],

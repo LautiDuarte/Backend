@@ -1,7 +1,7 @@
 import { Competition } from '../competition/competition.entity.js'
 import { Team } from '../team/team.entity.js'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
-import {  Entity, Collection, ManyToMany, ManyToOne, Property, Rel } from '@mikro-orm/core'
+import {  Entity, Collection, ManyToMany, ManyToOne, Property, Rel, OneToMany } from '@mikro-orm/core'
 
 @Entity()
 export class Match extends BaseEntity{
@@ -15,7 +15,12 @@ export class Match extends BaseEntity{
   @Property({
       nullable: false
     })
-    round!: string                              // Representa la etapa de la ronda (Octavos, Cuartos, Semifinales, Finales)
+    round!: string // Representa la fecha en la que se juega el partido
+
+  @ManyToOne(() => Team, {
+      nullable: true
+    })
+    winner!: Rel<Team>
 
   @ManyToOne(() => Competition, { 
         nullable: false,

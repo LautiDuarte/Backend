@@ -9,6 +9,7 @@ function sanitizeMatchInput(req: Request, res: Response, next: NextFunction) {
     matchDate: req.body.matchDate,
     competition: req.body.competition,
     round: req.body.round,
+    winner: req.body.winner,
     teams: req.body.teams
   }
 
@@ -26,7 +27,7 @@ async function findAll(req: Request, res: Response) {
     const matches = await em.find(
       Match, 
       {},
-      { populate: ['round', 'competition', 'teams'] }
+      { populate: ['competition', 'teams'] }
     )
     res.status(200).json(matches)
   } catch (error: any) {
@@ -40,7 +41,7 @@ async function findOne(req: Request, res: Response) {
     const match = await em.findOneOrFail(
       Match, 
       { id },
-      { populate: ['round', 'competition', 'teams']}
+      { populate: ['competition', 'teams']}
     )
     res
       .status(200)

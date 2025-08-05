@@ -1,4 +1,6 @@
 import { Competition } from './competition.entity.js'
+import { generateMatches } from './competition.service.js'
+import { Team } from '../team/team.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
 
@@ -35,12 +37,49 @@ function sanitizecompetitionInput(req: Request, res: Response, next: NextFunctio
   next()
 }
 
+
+async function startCompetition(req: CompetitionRequest, res: Response) {
+  try {
+    const id = Number.parseInt(req.params.id)
+    const competition = await em.findOneOrFail(Competition, { id }, {
+      populate: ['registrations.team', 'userCreator'],
+    })
+
+    // Solo puede iniciar el creador o un admin
+    if (competition.userCreator?.id !== req.user?.id && req.user?.role !== 'admin') {
+      return res.status(403).json({ message: 'You are not authorized to start this competition' })
+    }
+
+    // Filtrar equipos aceptados
+    const acceptedTeams = competition.registrations?.filter((r) => r.status === 'accepted').map((r) => r.team as Team) || []
+
+    if (acceptedTeams.length < 2) {
+      return res.status(400).json({ message: 'Not enough teams to start the competition' })
+    }
+
+    // Setear fecha de inicio si no tiene
+    const now = new Date()
+    competition.dateStart = now
+
+    // Generar partidos
+    const matches = generateMatches(acceptedTeams, competition, now)
+
+    matches.forEach((m) => em.persist(m))
+    await em.flush()
+
+    res.status(200).json({ message: 'Competition started', matchesCount: matches.length })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+
 async function findAll(req: Request, res: Response) {
   try {
     const competitions = await em.find(
       Competition, 
       {},
-      { populate: ['game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['matches.teams', 'game', 'region', 'userCreator', 'registrations'] }
     )
     res.status(200).json(competitions)
   } catch (error: any) {
@@ -55,7 +94,7 @@ async function findOne(req: Request, res: Response) {
     const competition = await em.findOneOrFail(
       Competition,
       { id },
-      { populate: ['game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['matches.teams', 'game', 'region', 'userCreator', 'registrations'] }
     )
     res
       .status(200)
@@ -112,4 +151,4 @@ async function remove(req: CompetitionRequest, res: Response) {
   }
 }
 
-export { sanitizecompetitionInput, findAll, findOne, add, update, remove }
+export { sanitizecompetitionInput, startCompetition, findAll, findOne, add, update, remove }
