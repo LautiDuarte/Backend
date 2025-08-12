@@ -22,6 +22,11 @@ export class Match extends BaseEntity{
     })
     winner!: Rel<Team>
 
+  @Property({
+      nullable: true
+    })
+    draw!: boolean
+
   @ManyToOne(() => Competition, { 
         nullable: false,
         deleteRule: 'cascade'

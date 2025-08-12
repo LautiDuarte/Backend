@@ -10,6 +10,7 @@ import { teamRouter } from './team/team.routes.js'
 import { userRouter } from './user/user.routes.js'
 import { competitionRouter } from './competition/competition.routes.js'
 import { gameRouter } from './game/game.routes.js'
+import { matchRouter } from './match/match.routes.js'
 import cors from 'cors'
 import multer, { FileFilterCallback } from 'multer'
 import path from 'path'
@@ -60,6 +61,7 @@ app.use('/api/gameType', gameTypeRouter)
 app.use('/api/news', newsRouter)
 app.use('/api/region', regionRouter)
 app.use('/api/inscription', inscriptionRouter)
+app.use('/api/match', matchRouter)
 app.use('/api/team', teamRouter)
 app.use('/api/user', userRouter)
 app.use('/api/competition', competitionRouter)

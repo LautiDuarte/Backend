@@ -45,12 +45,18 @@ async function startCompetition(req: CompetitionRequest, res: Response) {
       populate: ['registrations.team', 'userCreator'],
     })
 
-    // Solo puede iniciar el creador o un admin
     if (competition.userCreator?.id !== req.user?.id && req.user?.role !== 'admin') {
       return res.status(403).json({ message: 'You are not authorized to start this competition' })
     }
 
-    // Filtrar equipos aceptados
+    if (competition.dateStart) {
+      return res.status(400).json({ message: 'Competition has already started' })
+    }
+
+    if (competition.dateInscriptionLimit && competition.dateInscriptionLimit > new Date()) {
+      return res.status(400).json({ message: 'Inscription period is not over yet' })
+    }
+
     const acceptedTeams = competition.registrations?.filter((r) => r.status === 'accepted').map((r) => r.team as Team) || []
 
     if (acceptedTeams.length < 2) {
@@ -94,7 +100,7 @@ async function findOne(req: Request, res: Response) {
     const competition = await em.findOneOrFail(
       Competition,
       { id },
-      { populate: ['matches.teams', 'game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['matches.teams', 'matches.winner', 'game', 'region', 'userCreator', 'registrations'] }
     )
     res
       .status(200)

@@ -12,12 +12,6 @@ export class Team extends BaseEntity{
     })
     name!: string
 
-    @Property({
-        nullable: false,
-        default: 0
-    })
-    points!: number
-
     @ManyToOne(() => User, {
         nullable: false 
     })

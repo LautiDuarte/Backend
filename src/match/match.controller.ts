@@ -10,6 +10,7 @@ function sanitizeMatchInput(req: Request, res: Response, next: NextFunction) {
     competition: req.body.competition,
     round: req.body.round,
     winner: req.body.winner,
+    draw: req.body.draw,
     teams: req.body.teams
   }
 
@@ -27,7 +28,7 @@ async function findAll(req: Request, res: Response) {
     const matches = await em.find(
       Match, 
       {},
-      { populate: ['competition', 'teams'] }
+      { populate: ['competition', 'teams', 'winner'] }
     )
     res.status(200).json(matches)
   } catch (error: any) {
@@ -41,7 +42,7 @@ async function findOne(req: Request, res: Response) {
     const match = await em.findOneOrFail(
       Match, 
       { id },
-      { populate: ['competition', 'teams']}
+      { populate: ['competition', 'teams', 'winner']}
     )
     res
       .status(200)
@@ -66,8 +67,21 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const match = em.getReference(Match, id)
-    em.assign(match, req.body.sanitizedInput)
+    const match = await em.findOneOrFail(Match, { id }, { populate: ['competition', 'teams', 'winner'] })
+    if (!match) {
+      return res.status(404).json({ message: 'Match not found' })
+    }
+    if (match.winner !== null || match.draw !== null) {
+      return res.status(400).json({ message: 'Match winner or draw already set' })
+    }
+    const { winner, matchDate, round, draw } = req.body.sanitizedInput
+
+    if (winner !== undefined) match.winner = winner
+    if (matchDate !== undefined) match.matchDate = new Date(matchDate)
+    if (round !== undefined) match.round = round
+    if (draw !== undefined) match.draw = draw
+
+    
     await em.flush()
     res.status(200).json()
   } catch (error: any) {

@@ -16,7 +16,6 @@ interface TeamRequest extends Request {
 function sanitizeteamInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
-    points: req.body.points,
     userCreator: req.body.userCreator,
     players: req.body.players,
     registrations: req.body.registrations,
