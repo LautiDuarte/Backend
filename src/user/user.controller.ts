@@ -1,7 +1,7 @@
 import { User } from './user.entity.js'
 import { Request, Response, NextFunction } from 'express'
 import { orm } from '../shared/db/orm.js'
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { sendEmail } from '../services/emailService.js';
 import crypto from 'crypto';
