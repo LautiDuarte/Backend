@@ -22,7 +22,7 @@ const app = express()
 app.use(express.json())
 
 const corsOptions = {
-  origin: 'http://localhost:4200', 
+  origin: [process.env.FRONTEND_URL ?? 'http://localhost:4200'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 
 };
@@ -72,9 +72,11 @@ app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })
 })
 
-await syncSchema() // never in production
+if (process.env.NODE_ENV !== 'production') {
+  await syncSchema();
+}
 
-const PORT = process.env.PORT || 3000; // usa el puerto de Render o 3000 localmente
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  console.log(`Server running on port ${PORT}`);
+});
