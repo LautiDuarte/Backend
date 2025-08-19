@@ -84,25 +84,24 @@ async function add(req: Request, res: Response){
   }
 }
 
-/*async function add(req: Request, res: Response) {
-  try {
-    const inscription = em.create(Inscription, req.body.sanitizedInput)
-    await em.flush()
-    res
-      .status(201)
-      .json(inscription)
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
-}*/
 
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscription = em.getReference(Inscription, id)
-    em.assign(inscription, req.body.sanitizedInput)
+    const inscription = await em.findOneOrFail(Inscription, { id })
+
+    // reasignar valores permitidos
+    if (req.body.sanitizedInput.status !== undefined) {
+      inscription.status = req.body.sanitizedInput.status
+    }
+    if (req.body.sanitizedInput.points !== undefined) {
+      inscription.points = req.body.sanitizedInput.points
+    }
+
     await em.flush()
-    res.status(200).json()
+    await em.populate(inscription, ['competition', 'team'])
+    res.status(200).json(inscription)
+
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }

@@ -85,7 +85,7 @@ async function findAll(req: Request, res: Response) {
     const competitions = await em.find(
       Competition, 
       {},
-      { populate: ['matches.teams', 'game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['matches.teams', 'game', 'region', 'userCreator', 'registrations.team', 'registrations'] }
     )
     res.status(200).json(competitions)
   } catch (error: any) {
@@ -100,7 +100,7 @@ async function findOne(req: Request, res: Response) {
     const competition = await em.findOneOrFail(
       Competition,
       { id },
-      { populate: ['matches.teams', 'matches.winner', 'game', 'region', 'userCreator', 'registrations'] }
+      { populate: ['matches.teams', 'matches.winner', 'game', 'region', 'userCreator', 'registrations.team','registrations'] }
     )
     res
       .status(200)
@@ -132,7 +132,27 @@ async function update(req: CompetitionRequest, res: Response) {
       return res.status(403).json({ message: 'You are not authorized to update this competition' })
     }
 
-    em.assign(competition, req.body.sanitizedInput)
+    if (competition.dateStart) {
+      const allowedFields = ['winner', 'dateEnd']
+      const sanitized: any = {}
+      
+      for (const key of allowedFields) {
+        if (req.body.sanitizedInput[key] !== undefined) {
+          sanitized[key] = req.body.sanitizedInput[key]
+        }
+      }
+      if (Object.keys(sanitized).length === 0) {
+        return res.status(400).json({
+          message: 'Cannot update initial fields after the competition has started',
+        })
+      }
+
+      em.assign(competition, sanitized)
+    } else {
+      // Si no comenzó, puede actualizar cualquier campo permitido en sanitize
+      em.assign(competition, req.body.sanitizedInput)
+    }
+
     await em.flush()
     res.status(200).json()
   } catch (error: any) {
