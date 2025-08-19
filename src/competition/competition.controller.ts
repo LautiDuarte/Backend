@@ -85,7 +85,7 @@ async function findAll(req: Request, res: Response) {
     const competitions = await em.find(
       Competition, 
       {},
-      { populate: ['matches.teams', 'game', 'region', 'userCreator', 'registrations.team', 'registrations'] }
+      { populate: ['matches.teams', 'game', 'region', 'userCreator', 'registrations.team', 'registrations', 'winner'] }
     )
     res.status(200).json(competitions)
   } catch (error: any) {
@@ -100,7 +100,7 @@ async function findOne(req: Request, res: Response) {
     const competition = await em.findOneOrFail(
       Competition,
       { id },
-      { populate: ['matches.teams', 'matches.winner', 'game', 'region', 'userCreator', 'registrations.team','registrations'] }
+      { populate: ['matches.teams', 'matches.winner', 'game', 'region', 'userCreator', 'registrations.team','registrations', 'winner'] }
     )
     res
       .status(200)
