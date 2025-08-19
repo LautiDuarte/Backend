@@ -10,6 +10,9 @@
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/app.js\"",
     "test": "jest"
   },
+  "engines": {
+  "node": "20.x"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
