@@ -22,7 +22,7 @@ const app = express()
 app.use(express.json())
 
 const corsOptions = {
-  origin: ["https://frontend-dsw-nine.vercel.app/"], 
+  origin: [process.env.FRONTEND_URL ?? 'http://localhost:4200'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 
 };
