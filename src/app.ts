@@ -21,13 +21,28 @@ import { fileURLToPath } from 'url';
 const app = express()
 app.use(express.json())
 
-const corsOptions = {
-  origin: [process.env.FRONTEND_URL ?? 'http://localhost:4200'], 
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-  allowedHeaders: ['Content-Type', 'Authorization'], 
-};
+
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:4200',
+  'http://localhost:4200'
+]
+
+const corsOptions: cors.CorsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}
 
 app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -52,6 +67,7 @@ if (!fs.existsSync(uploadsPath)) {
 }
 
 app.use('/uploads', express.static(uploadsPath));
+
 
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next)
