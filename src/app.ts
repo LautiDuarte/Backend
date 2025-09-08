@@ -18,12 +18,13 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 
+
 const app = express()
 app.use(express.json())
 
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL, 'http://localhost:4200'
+  process.env.FRONTEND_URL || 'http://localhost:4200'
 ]
 
 const corsOptions: cors.CorsOptions = {
@@ -34,11 +35,7 @@ const corsOptions: cors.CorsOptions = {
       callback(new Error('Not allowed by CORS'))
     }
   },
-<<<<<<< HEAD
-methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-=======
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
->>>>>>> origin/main
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }
