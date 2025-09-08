@@ -23,8 +23,7 @@ app.use(express.json())
 
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:4200',
-  'http://localhost:4200'
+  process.env.FRONTEND_URL, 'http://localhost:4200'
 ]
 
 const corsOptions: cors.CorsOptions = {
