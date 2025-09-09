@@ -24,9 +24,10 @@ app.use(express.json())
 
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:4200'
-]
-
+    process.env.FRONTEND_URL, // Usamos directamente la variable
+    'http://localhost:4200', // Agregamos una opción para desarrollo local
+    ...(process.env.NODE_ENV === 'production' ? [] : ['http://localhost:4200']) // Agregamos localhost solo en desarrollo
+];
 const corsOptions: cors.CorsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {

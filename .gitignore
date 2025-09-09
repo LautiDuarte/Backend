@@ -33,3 +33,4 @@ uploads/*
 *.vsix
 
 pnpm-lock.yaml
+.env
