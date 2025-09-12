@@ -16,7 +16,7 @@ function sanitizeuserInput(req: Request, res: Response, next: NextFunction) {
     email: req.body.email,
     teams: req.body.teams,
     competitionsCreated: req.body.competitionsCreated,
-    iconUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
+    iconUrl: req.file ? `${process.env.BACKEND_URL}/uploads/${req.file.filename}` : undefined,
     role: req.body.role
   };
 

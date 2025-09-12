@@ -10,7 +10,7 @@ function sanitizenewsInput(req: Request, res: Response, next: NextFunction) {
     title: req.body.title,
     body: req.body.body,
     date: req.body.date,
-    imageUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
+    imageUrl: req.file ? `${process.env.BACKEND_URL}/uploads/${req.file.filename}` : undefined,
   }
 
 

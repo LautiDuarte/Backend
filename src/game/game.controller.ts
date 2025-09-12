@@ -10,7 +10,7 @@ function sanitizegameInput(req: Request, res: Response, next: NextFunction) {
     description: req.body.description,
     gameType: req.body.gameType,
     competitions: req.body.competitions,
-    imageUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
+    imageUrl: req.file ? `${process.env.BACKEND_URL}/uploads/${req.file.filename}` : undefined,
   };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

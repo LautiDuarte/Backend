@@ -8,7 +8,7 @@ function sanitizeregionInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
     competitions: req.body.competitions,
-    imageUrl: req.file ? `/uploads/${req.file.filename}` : undefined,
+    imageUrl: req.file ? `${process.env.BACKEND_URL}/uploads/${req.file.filename}` : undefined,
   }
 
 
