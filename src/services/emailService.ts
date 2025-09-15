@@ -21,9 +21,9 @@ export const sendEmail = async (to: string, subject: string, text: string) => {
       subject,
       text,
     });
-    console.log(`Email enviado a ${to}`);
+    console.log(`Email sent to ${to}`);
   } catch (error) {
-    console.error('Error al enviar email:', error);
-    throw new Error('No se pudo enviar el correo');
+    console.error('Error sending email:', error);
+    throw new Error('Could not send email');
   }
 }

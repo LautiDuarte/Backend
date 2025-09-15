@@ -24,9 +24,9 @@ app.use(express.json())
 
 
 const allowedOrigins = [
-    process.env.FRONTEND_URL, // Usamos directamente la variable
-    'http://localhost:4200', // Agregamos una opción para desarrollo local
-    ...(process.env.NODE_ENV === 'production' ? [] : ['http://localhost:4200']) // Agregamos localhost solo en desarrollo
+    process.env.FRONTEND_URL, 
+    'http://localhost:4200', 
+    ...(process.env.NODE_ENV === 'production' ? [] : ['http://localhost:4200']) 
 ];
 const corsOptions: cors.CorsOptions = {
   origin: function (origin, callback) {
@@ -89,9 +89,9 @@ app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })
 })
 
-if (process.env.NODE_ENV === 'production') {
+//if (process.env.NODE_ENV === 'production') {
   await syncSchema();
-}
+//}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
